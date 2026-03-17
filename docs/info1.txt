@@ -1,0 +1,1179 @@
+Visit the HL7 websiteVisit the FHIR websiteSearch FHIR
+US Core Implementation Guide
+8.0.1 - STU 8 United States of America flag
+
+Home
+Conformance 
+Guidance 
+FHIR Artifacts 
+Security
+Examples
+Downloads
+Change Log
+Looking Ahead 
+Table of ContentsHome
+This page is part of the US Core (v8.0.1: STU8) based on FHIR (HL7® FHIR® Standard) R4. This is the current published version. For a full list of available versions, see the Directory of published versions. Page versions: R8 R7 R6 R5 R4 R3
+
+Home
+Official URL: http://hl7.org/fhir/us/core/ImplementationGuide/hl7.fhir.us.core	Version: 8.0.1
+IG Standards status: Trial-use	Maturity Level: 3	Computable Name: USCore
+Other Identifiers: OID:2.16.840.1.113883.4.642.40.2
+Copyright/Legal: Used by permission of HL7 International, all rights reserved Creative Commons License
+
+
+Introduction
+Background
+How To Read This Guide
+US Core Actors
+US Core Profiles
+US Core FHIR RESTful interactions
+Key updates and detailed changes between this and prior versions are available on the US Core Change Log and Changes Between Versions pages.
+
+Introduction
+This guide and the US Core profiles have become the foundation for US Realm FHIR implementation guides. This annual release reflects changes to U.S. Core Data for Interoperability (USCDI) and comments and requests from the US Realm FHIR community. (The US Core Roadmap page outlines this approach to yearly updates.) US Core has benefitted from testing and guidance by the Argonaut Project Team. Their feedback continues to lay the groundwork for documenting the US Core Profile design, interactions, requirements, and guidelines for patient data access and Assistant Secretary for Technology Policy (ASTP) Certification testing. Under the guidance of HL7 and the HL7 US Realm Steering Committee, the content will expand in future versions to meet the needs specific to the US Realm.
+
+The US Core Implementation Guide is based on FHIR Version R4. It defines the minimum constraints on the FHIR resources to create the US Core Profiles. The elements, extensions, vocabularies, and value sets that SHALL be present are identified, and how they are used is defined. It also documents the minimum FHIR RESTful interactions for each US Core Profiles to access patient data. Establishing the "floor" of standards to promote interoperability and adoption through common implementation allows for further standards development evolution for specific use cases. There are two different ways to implement US Core:
+
+Profile Only Support: Systems may support only the US Core Profiles to represent clinical information.
+Profile Support + Interaction Support: Systems may support both the US Core Profile content structure and the RESTful interactions defined for a resource.
+For a detailed description of these different usages of US Core, see the Conformance Requirements page.
+
+Background
+The US Core requirements were initially developed, balloted, and published in FHIR DSTU2 as part of the Office of the National Coordinator for Health Information Technology (ONC) sponsored Data Access Framework (DAF) project. The Argonaut Data Query Implementation Guide superseded DAF and documented security and authorization and the querying of the 2015 Edition Common Clinical Data Set (CCDS) and static documents. US Core descended directly from the Argonaut guide to support FHIR Version STU3 and eventually FHIR R4 and the ASTP/ONC U.S. Core Data for Interoperability (USCDI). Refer to the USCDI page which maps the US Core versions and profiles to the USCDI versions and Data Elements.
+
+How To Read This Guide
+This Guide is divided into several pages, which are listed at the top of each page in the menu bar.
+
+Home: The home page provides the introduction and background for US Core.
+Conformance: These pages describe the set of rules to claim conformance to this guide
+General Requirements: This page defines requirements common to all actors and profiles used in this guide, including how CapabilityStatements are used to claim conformance.
+Must Support: This page defines the expectations for mandatory and Must Support elements in the US Core Profiles.
+Guidance: The Guidance pages document best practices and how to use the profiles and transactions defined in this guide.
+USCDI: This page maps the US Core Profiles to the (USCDI) data classes and data elements.
+General Guidance: This page provides guidance, definitions, and requirements common to all actors and profiles used in this guide.
+Clinical Notes: This page provides guidance on the interactions between Consumers and Producers of clinical notes.
+Medication List: This page provides guidance on how a patient or provider can access a patient's medications.
+Basic Provenance: This page provides implementers with important definitions to create and share the Provenance Resource.
+Screening and Assessments: This page documents how US Core Profiles are used to represent screenings and assessments for patient health status
+Changes Between Versions: This page considers the user and developer experience when transitioning between versions of US Core and documents the changes between versions.
+FHIR Artifacts: These pages provide detailed descriptions and formal definitions for all the FHIR objects defined in this guide.
+Profiles and Extensions: This page lists the US Core Profiles and Extensions defined in this guide to exchange quality data.
+Each US Core Profile page includes a narrative description that lists all the Mandatory and Must Support data elements, profile-specific implementation guidance, and formal definitions. A "Quick Start" guide summarizes the supported search transactions for each profile. Although the guidance typically focuses on the profiled elements, it also may cover un-profiled elements to aid with implementation and certification.
+Search Parameters and Operations: This page lists the defined US Core Operations and Search Parameters used in US Core transactions.
+Terminology: This page lists the US Core ValueSets, and CodeSystems defined for the profiles.
+Capability Statements: These pages define the expected FHIR capabilities of the US Core Servers and Clients.
+Security: This page documents the general security requirements and recommendations for actors.
+Examples: This page lists all the examples used in this guide. These examples show what data produced and consumed by systems conforming with this implementation guide might look like. Every effort has been made to ensure that the examples are correct and useful, but they are not a normative part of the specification, nor fully representative of real-world examples.
+Downloads: This page provides links to downloadable artifacts.
+Change Log: This page documents the changes across the versions of US Core. It is a vital resource for implementers, developers, and stakeholders to understand the guide’s progression.
+Looking Ahead: These pages provide a preview of the future direction of US Core
+US Core Roadmap: This page outlines the approach to adding new content to US Core.
+Writing Vital Signs: This page documents how to write vital sign Observation using patient- and provider-facing apps.
+Patient Data Feed: This page documents how to use FHIR Subscriptions to be notified when events related to US Core content occur.
+US Core Actors
+The following actors are part of the US Core IG:
+
+US Core Requestor
+A US Core Requester is an application that initiates a data access request to retrieve patient data. The US Core Requestor is the Client in a Client-Server interaction. The terms "US Core Requestor" and "Client" are used interchangeably throughout this guide and are not meant to limit this actor to only patient and provider apps. For example, payers and other users can use the same technology. These terms are a short-hand notation for "user application".
+
+US Core Responder
+A US Core Responder is a system that responds to the data access request providing patient data. The US Core responder is the Server in a Client-Server interaction. The terms "US Core Responder", "Server", and "EHR" are used interchangeably throughout this guide and are not meant to limit this actor to electronic health record systems. For example, HIEs, care coordination platforms, population health systems, etc., can use the same technology. These terms are a short-hand notation for "interoperable healthcare platform".
+
+US Core Profiles
+Below is the list of US Core Profiles. Each profile identifies which core elements, extensions, vocabularies, and ValueSets SHALL be present in the resource when using this profile. Together, they promote interoperability and adoption through common implementation and provide the floor for standards development for specific use cases. See the USCDI page, for a mapping to the U.S. Core Data for Interoperability (USCDI).
+
+A simple narrative summary gives each profile's requirements and guidance. A formal hierarchical table presents a logical view of the content in both a differential and snapshot view, and provides references to appropriate terminologies and examples.
+
+US Core Profile Maturity
+All US Core FHIR conformance and terminology artifacts are assigned a FHIR Maturity Level. The content in this release has been thoroughly reviewed through the HL7 ballot and other processes, implemented, and subject to ASTP certification testing. A FHIR Maturity Level of FMM 3 is assigned to US Core artifacts associated with a USCDI Data Class or Element and subject to regulation and ASTP certification. A FHIR Maturity Level of FMM 2 is assigned to US Core artifacts related to a USCDI Data Class or Element but have not yet been identified in regulation or subject to ASTP certification. All other US Core artifacts have been assigned a FHIR Maturity Level of FMM 3 based upon community review. Refer to the FHIR specification for more information about maturity levels.
+
+AllergyIntolerance
+US Core AllergyIntolerance Profile
+CarePlan
+US Core CarePlan Profile
+CareTeam
+US Core CareTeam Profile
+Condition
+US Core Condition Encounter Diagnosis Profile
+US Core Condition Problems and Health Concerns Profile
+Coverage
+US Core Coverage Profile
+Device
+US Core Implantable Device Profile
+DiagnosticReport
+US Core DiagnosticReport Profile for Laboratory Results Reporting
+US Core DiagnosticReport Profile for Report and Note Exchange
+DocumentReference
+US Core ADI DocumentReference Profile
+US Core DocumentReference Profile
+Encounter
+US Core Encounter Profile
+Goal
+US Core Goal Profile
+Immunization
+US Core Immunization Profile
+Location
+US Core Location Profile
+Medication
+US Core Medication Profile
+MedicationDispense
+US Core MedicationDispense Profile
+MedicationRequest
+US Core MedicationRequest Profile
+Observation
+US Core Average Blood Pressure Profile
+US Core Care Experience Preference Profile
+US Core Observation ADI Documentation Profile
+US Core Observation Clinical Result Profile
+US Core Laboratory Result Observation Profile
+US Core Observation Occupation Profile
+US Core Observation Pregnancy Intent Profile
+US Core Observation Pregnancy Status Profile
+US Core Observation Screening Assessment Profile
+US Core Observation Sexual Orientation Profile
+US Core Simple Observation Profile
+US Core Smoking Status Observation Profile
+US Core Treatment Intervention Preference Profile
+US Core Vital Signs Profile
+US Core Pediatric BMI for Age Observation Profile
+US Core Pediatric Weight for Height Observation Profile
+US Core Blood Pressure Profile
+US Core BMI Profile
+US Core Body Height Profile
+US Core Body Temperature Profile
+US Core Body Weight Profile
+US Core Head Circumference Profile
+US Core Heart Rate Profile
+US Core Pulse Oximetry Profile
+US Core Respiratory Rate Profile
+US Core Pediatric Head Occipital Frontal Circumference Percentile Profile
+Organization
+US Core Organization Profile
+Patient
+US Core Patient Profile
+Practitioner
+US Core Practitioner Profile
+PractitionerRole
+US Core PractitionerRole Profile
+Procedure
+US Core Procedure Profile
+Provenance
+US Core Provenance Profile
+QuestionnaireResponse
+US Core QuestionnaireResponse Profile
+RelatedPerson
+US Core RelatedPerson Profile
+ServiceRequest
+US Core ServiceRequest Profile
+Specimen
+US Core Specimen Profile
+US Core FHIR RESTful interactions
+For systems that support the US Core Profile content structure and the RESTful interactions defined for a resource, the requirements are formally defined in the US Core CapabilityStatements. In addition, each profile page has a Quick Start Section that documents the required FHIR RESTful search and read operations. These sections demonstrate how to access a patient's clinical and administrative data:
+
+Example of a simple FHIR RESTful Search Transaction
+basic_fhir_restful_interaction.svg
+See the FHIR specification for details on FHIR RESTful Search API and the SMART App Launch for how an application gets access to a patient record.
+
+Primary Authors: Brett Marquard, Eric Haas, Gay Dolin
+
+IG © 2025+ HL7 International / Cross-Group Projects. Package hl7.fhir.us.core#8.0.1 based on FHIR 4.0.1. Generated 2025-12-10
+Links: Table of Contents | QA Report | Version History | CC0 | Propose a changelogo fhirRelease 5visit the hl7 websiteSearch CI-Build FHIR
+Home
+Getting Started
+Documentation
+Data Types
+Resource Types
+Terminologies
+Artifacts
+Implementation Guides icon
+link Workflow NutritionIntake
+This page is part of the FHIR Specification (v5.0.0: R5 - STU). This is the current published version. For a full list of available versions, see the Directory of published versions 
+
+Content
+Examples
+Detailed Descriptions
+Mappings
+Operations
+Search Params
+Profiles
+Extensions
+R4 Conversions
+12.20 Resource NutritionIntake - Content 
+Orders and Observations icon Work Group	Maturity Level: 1	 Trial Use	Security Category: Patient	Compartments: Encounter, Patient, Practitioner, RelatedPerson
+
+A record of food or fluid that is being consumed by a patient. A NutritionIntake may indicate that the patient may be consuming the food or fluid now or has consumed the food or fluid in the past. The source of this information can be the patient, significant other (such as a family member or spouse), or a clinician. A common scenario where this information is captured is during the history taking process during a patient visit or stay or through an app that tracks food or fluids consumed. The consumption information may come from sources such as the patient's memory, from a nutrition label, or from a clinician documenting observed intake.
+
+12.20.1 Scope and Usage 
+This resource is an event resource from a FHIR workflow perspective - see Workflow. It is the intent of the Orders and Observation Workgroup to align this resource with the workflow pattern for event resources.
+
+The NutritionIntake resource, in conjunction with the NutritionProduct resource, is utilized to capture details about the consumption of foods, fluids, and enteral nutrition. Dietitians and other clinicians use the data to calculate how much nutrition a patient has taken in. NutritionIntake represents the event of consuming food, fluid, etc. and NutritionProduct represents the actual food items.
+
+NutritionIntake can also be used to record a person’s intake through uses of food tracking apps (e.g.MyFitnessPal), any grocery store purchases, or a student’s meal consumption in a school district.
+
+NutritionIntake can be utilized in many environments where food is served, consumed or purchased: hospitals/acute care, meal tracking systems, school districts, grocery stores, outpatient settings, LTC, etc. NutritionIntake should be general enough to capture intake regardless of country or region.
+
+Parenteral nutrition is out of scope as this ordering is handled through MedicationRequest, thus administration of parenteral nutrition should also be captured through MedicationAdministration.
+
+12.20.2 Boundaries and Relationships 
+Oral intake of food, fluids, oral nutritional supplements (i.e. Ensure), or enteral nutrition should be recorded using the NutritionIntake resource.
+Supplements, such as vitamins, minerals, herbals, should be recorded using the medication resources
+Parenteral nutrition should be recorded using the medication resources
+12.20.3 Background and Context 
+As a dietitian, it is important to be able to know what a person is consuming and assess the adequacy of the patient’s diet. Capturing a patient’s intake is important to establish a baseline, determine care, track trends, and see improvement of that patient. Dietitians might use intake data to see patterns, such as when a diabetic patient’s blood glucose is consistently high due to over consumption of carbohydrates. Other clinicians have the need to monitor intake as well; for example, a nurse might need to know intake for administering insulin prior to meals or a physician may need to ensure a patient on a fluid restriction is following orders.
+
+Having intake documented within its own resource allows for consistency in documentation acrossmultiple disciplines and settings. In some instances, the Observation resource has been extended to capture intake; while this allows for a quick way to document intake, the Observation resource does not provide all the detail necessary, such as capturing all the nutrients ( including calories, vitamins, minerals, carbohydrates, etc.). Previous implementation attempts of using the Observation resourcehave noted this is cumbersome and has required too many extensions without being able to documentall the necessary details tied to ingredients in food and fluid products.
+
+12.20.4 References to this Resource 
+Implements: Event
+Resource References: itself
+12.20.5 Resource Content 
+StructureUMLXMLJSONTurtleR4 DiffAll
+Structure
+
+Name	Flags	Card.	Type	Description & Constraintsdoco
+.. NutritionIntake	TU		DomainResource	Record of food or fluid being taken by a patient
+
+Elements defined in Ancestors: id, meta, implicitRules, language, text, contained, extension, modifierExtension
+... identifier	Σ	0..*	Identifier	External identifier
+
+... instantiatesCanonical		0..*	canonical(Definition)	Instantiates FHIR protocol or definition
+
+... instantiatesUri		0..*	uri	Instantiates external protocol or definition
+
+... basedOn	Σ	0..*	Reference(NutritionOrder | CarePlan | ServiceRequest)	Fulfils plan, proposal or order
+
+... partOf	Σ	0..*	Reference(NutritionIntake | Procedure | Observation)	Part of referenced event
+
+... status	?!Σ	1..1	code	preparation | in-progress | not-done | on-hold | stopped | completed | entered-in-error | unknown
+Binding: EventStatus (Required)
+... statusReason		0..*	CodeableConcept	Reason for current status
+Binding: ClinicalImpression Status Reason (Example)
+
+... code	Σ	0..1	CodeableConcept	Code representing an overall type of nutrition intake
+Binding: Diet Codes (Example)
+... subject	Σ	1..1	Reference(Patient | Group)	Who is/was consuming the food or fluid
+... encounter	Σ	0..1	Reference(Encounter)	Encounter associated with NutritionIntake
+... occurrence[x]	Σ	0..1		The date/time or interval when the food or fluid is/was consumed
+.... occurrenceDateTime			dateTime	
+.... occurrencePeriod			Period	
+... recorded	Σ	0..1	dateTime	When the intake was recorded
+... reported[x]		0..1		Person or organization that provided the information about the consumption of this food or fluid
+.... reportedBoolean			boolean	
+.... reportedReference			Reference(Patient | RelatedPerson | Practitioner | PractitionerRole | Organization)	
+... consumedItem		1..*	BackboneElement	What food or fluid product or item was consumed
+
+.... type	Σ	1..1	CodeableConcept	The type of food or fluid product
+Binding: Types of Edible Substances (Example)
+.... nutritionProduct	Σ	1..1	CodeableReference(NutritionProduct)	Code that identifies the food or fluid product that was consumed
+Binding: Food Type Codes (Example)
+.... schedule		0..1	Timing	Scheduled frequency of consumption
+.... amount	Σ	0..1	SimpleQuantity	Quantity of the specified food
+.... rate	Σ	0..1	SimpleQuantity	Rate at which enteral feeding was administered
+.... notConsumed		0..1	boolean	Flag to indicate if the food or fluid item was refused or otherwise not consumed
+.... notConsumedReason		0..1	CodeableConcept	Reason food or fluid was not consumed
+Binding: Reasons for why a food item was not consumed (Example)
+... ingredientLabel		0..*	BackboneElement	Total nutrient for the whole meal, product, serving
+
+.... nutrient		1..1	CodeableReference(Substance)	Total nutrient consumed
+Binding: Nutrient Modifier Codes (Example)
+.... amount		1..1	SimpleQuantity	Total amount of nutrient consumed
+... performer		0..*	BackboneElement	Who was performed in the intake
+
+.... function		0..1	CodeableConcept	Type of performer
+Binding: Procedure Performer Role Codes (Example)
+.... actor		1..1	Reference(Practitioner | PractitionerRole | Organization | CareTeam | Patient | Device | RelatedPerson)	Who performed the intake
+... location		0..1	Reference(Location)	Where the intake occurred
+... derivedFrom		0..*	Reference(Any)	Additional supporting information
+
+... reason		0..*	CodeableReference(Condition | Observation | DiagnosticReport | DocumentReference)	Reason for why the food or fluid is /was consumed
+Binding: Condition/Problem/Diagnosis Codes (Example)
+
+... note		0..*	Annotation	Further information about the consumption
+
+
+doco Documentation for this format icon
+See the Extensions for this resource
+
+ 
+
+Additional definitions: Master Definition XML + JSON, XML Schema/Schematron + JSON Schema, ShEx (for Turtle) + see the extensions, the spreadsheet version & the dependency analysis
+
+12.20.5.1 Terminology Bindings 
+Path	ValueSet	Type	Documentation
+NutritionIntake.status	EventStatus	Required	
+Codes identifying the lifecycle stage of an event.
+
+NutritionIntake.statusReason	ClinicalImpressionStatusReason	Example	
+Example codes indicating the reason why a ClinicalImpression is on hold or stopped. Note that these are in no way complete and might not even be appropriate for some uses.
+
+NutritionIntake.code	DietCodes	Example	
+Codes that can be used to indicate the type of food being ordered for a patient. This value set is provided as a suggestive example. It includes codes from SNOMED CT icon where concept is-a 182922004 (Dietary regime (regime/therapy))
+
+NutritionIntake.consumedItem.type	TypesOfEdibleSubstances	Example	
+This value set represents codes for types of edible substances and is provided as a suggestive example. It include codes from SNOMED CT icon where concept is-a 762766007 Edible Substance (substance).
+
+NutritionIntake.consumedItem.nutritionProduct	FoodTypeCodes	Example	
+This value set represents codes for types of foods and is provided as a suggestive example. It include codes from SNOMED CT icon where concept is-a 255620007 (Foods (substance)).
+
+NutritionIntake.consumedItem.notConsumedReason	ReasonsFoodItemNotConsumed	Example	
+This value set represents codes for types of edible substances and is provided as a suggestive example. It include codes from SNOMED CT icon where concept is-a 762766007 Edible Substance (substance).
+
+NutritionIntake.ingredientLabel.nutrient	NutrientModifierCodes	Example	
+NutrientModifier : Codes for types of nutrients that are being modified such as carbohydrate or sodium. This value set includes codes from SNOMED CT icon where concept is-a 226355009 (Nutrients(substance)), and the concepts for Sodium, Potassium and Fluid. This is provided as a suggestive example.
+
+NutritionIntake.performer.function	ProcedurePerformerRoleCodes	Example	
+This example value set defines the set of codes that can be used to indicate a role of a procedure performer.
+
+NutritionIntake.reason	ConditionProblemDiagnosisCodes	Example	
+Example value set for Condition/Problem/Diagnosis codes.
+
+
+12.20.6 Notes: 
+12.20.7 Search Parameters 
+Search parameters for this resource. See also the full list of search parameters for this resource, and check the Extensions registry for search parameters on extensions related to this resource. The common parameters also apply. See Searching for more information about searching in REST, messaging, and services.
+
+Name	Type	Description	Expression	In Common
+code	token	Returns statements of this code of NutritionIntake	NutritionIntake.code	22 Resources
+date	date	Date when patient was taking (or not taking) the medication	NutritionIntake.occurrence.ofType(dateTime) | NutritionIntake.occurrence.ofType(Period)	27 Resources
+encounter	reference	Returns statements for a specific encounter	NutritionIntake.encounter
+(Encounter)	29 Resources
+identifier	token	Return statements with this external identifier	NutritionIntake.identifier	65 Resources
+nutrition	token	Return intakes for a specific consumed item	NutritionIntake.consumedItem.nutritionProduct.concept	
+patient	reference	Returns statements for a specific patient.	NutritionIntake.subject.where(resolve() is Patient)
+(Patient)	66 Resources
+source	reference	Who or where the information in the statement came from	(NutritionIntake.reported as Reference)
+(Practitioner, Organization, Patient, PractitionerRole, RelatedPerson)	
+status	token	Return statements that match the given status	NutritionIntake.status	
+subject	reference	The identity of a patient, animal or group to list statements for	NutritionIntake.subject
+(Group, Patient)	
+FHIR ®© HL7.org 2011+. FHIR R5 hl7.fhir.core#5.0.0 generated on Sun, Mar 26, 2023 15:25+1100.
+Links: Search icon | Version History | Contents | Glossary | QA | Compare to R4 icon | Compare to R4B icon | CC0 | Propose a change iconlogo fhirRelease 5visit the hl7 websiteSearch CI-Build FHIR
+Home
+Getting Started
+Documentation
+Data Types
+Resource Types
+Terminologies
+Artifacts
+Implementation Guides icon
+link Workflow NutritionOrder
+This page is part of the FHIR Specification (v5.0.0: R5 - STU). This is the current published version. For a full list of available versions, see the Directory of published versions . Page versions: R5 R4B R4 R3 R2
+
+Content
+Examples
+Detailed Descriptions
+Mappings
+Operations
+Search Params
+Profiles
+Extensions
+R4 Conversions
+12.19 Resource NutritionOrder - Content 
+Orders and Observations icon Work Group	Maturity Level: 2	 Trial Use	Security Category: Patient	Compartments: Encounter, Patient, Practitioner
+
+A request to supply a diet, formula feeding (enteral) or oral nutritional supplement to a patient/resident.
+
+12.19.1 Scope and Usage 
+This resource is a request resource from a FHIR workflow perspective - see Workflow. It is the intent of the Orders and Observation Workgroup to align this resource with the workflow pattern for request resources.
+
+The NutritionOrder resource describes a request for oral diets (including general diets such as General Healthy diet, or therapeutic diets such as Consistent Carbohydrate, 2 gram Sodium, or Fluid Restricted), oral nutrition supplements (such as nutritionally complete pre-packed drinks), enteral nutrition (tube feedings) and infant formula which govern the distribution of food and nutritional products used to feed patients within an in-patient setting. It does not cover orders for parenteral (IV) nutrition which are typically filled by pharmacy. These nutrition orders are combined with information on a patient's food allergies and intolerances, and ethnic or cultural food preferences (e.g. Kosher or Vegetarian) to inform healthcare personnel about the type, texture, and/or quantity of foods that the patient should receive or consume.
+
+Enteral orders are distinguished from supplements because they have some unique attributes and typically include administration information whereas oral nutritional supplements may simply be supplied (e.g. home health or outpatient settings). In a simple case, the requestor may designate type of product, product name and the route of administration along with free text instructions without a having to complete the additional structured details.
+
+This resource is intended to be used by providers from a variety of specialties such as physicians, dietitian/nutritionists, or speech therapists. One provider may simply order a base element oral diet such as General Healthful diet. Another provider, based on scope of practice, may use other elements to communicate additional therapeutic needs or patient preferences. The optionality included gives an ordering provider the capability to write a simple order for an oral diet, nutritional supplement or formula with minimal requirements beyond that of specifying the diet, supplement or formula product, but also supports the ability to provide more detailed information that may be further augmented by a dietitian or nutrition specialist. For example, a physician may order a 2 g sodium diet. A speech therapist, based on the results of a swallowing evaluation, then orders a mechanically altered texture with nectar thick liquids.
+
+12.19.2 Boundaries and Relationships 
+The NutritionOrder resource is used for requesting oral diets, oral nutrition supplements and enteral feedings in an in-patient setting. The MedicationRequest resource should be used for requesting parenteral (IV) nutrition and prescribing dietary supplements such as vitamin or mineral supplements.
+
+The Nutrition Order is a record of the request for the supply of a diet, oral supplement or enteral formulas for a patient. However, to initiate the request requires the use of the Task resource and its associated workflow with the Nutrition Order referenced from Task.basedOn, or by using the Nutrition Task resource in the context of a messaging or service workflow where the request is explicit or implicit.
+
+12.19.3 References to this Resource 
+Implements: Request
+Resource References: AuditEvent, CarePlan, Claim, ClaimResponse, DiagnosticReport... Show 8 more
+12.19.4 Resource Content 
+StructureUMLXMLJSONTurtleR4 DiffAll
+Structure
+
+Name	Flags	Card.	Type	Description & Constraintsdoco
+.. NutritionOrder	TU		DomainResource	Diet, formula or nutritional supplement request
++ Warning: Nutrition Order SHALL contain either Oral Diet , Supplement, or Enteral Formula class
+
+Elements defined in Ancestors: id, meta, implicitRules, language, text, contained, extension, modifierExtension
+... identifier		0..*	Identifier	Identifiers assigned to this order
+
+... instantiatesCanonical	Σ	0..*	canonical(ActivityDefinition | PlanDefinition)	Instantiates FHIR protocol or definition
+
+... instantiatesUri	Σ	0..*	uri	Instantiates external protocol or definition
+
+... instantiates		0..*	uri	Instantiates protocol or definition
+
+... basedOn		0..*	Reference(CarePlan | NutritionOrder | ServiceRequest)	What this order fulfills
+
+... groupIdentifier	Σ	0..1	Identifier	Composite Request ID
+... status	?!Σ	1..1	code	draft | active | on-hold | revoked | completed | entered-in-error | unknown
+Binding: RequestStatus (Required)
+... intent	?!Σ	1..1	code	proposal | plan | directive | order | original-order | reflex-order | filler-order | instance-order | option
+Binding: RequestIntent (Required)
+... priority		0..1	code	routine | urgent | asap | stat
+Binding: RequestPriority (Required)
+... subject	Σ	1..1	Reference(Patient | Group)	Who requires the diet, formula or nutritional supplement
+... encounter		0..1	Reference(Encounter)	The encounter associated with this nutrition order
+... supportingInformation		0..*	Reference(Any)	Information to support fulfilling of the nutrition order
+
+... dateTime	Σ	1..1	dateTime	Date and time the nutrition order was requested
+... orderer	Σ	0..1	Reference(Practitioner | PractitionerRole)	Who ordered the diet, formula or nutritional supplement
+... performer		0..*	CodeableReference(CareTeam | Practitioner | PractitionerRole | RelatedPerson | Patient | Organization)	Who is desired to perform the administration of what is being ordered
+
+... allergyIntolerance		0..*	Reference(AllergyIntolerance)	List of the patient's food and nutrition-related allergies and intolerances
+
+... foodPreferenceModifier		0..*	CodeableConcept	Order-specific modifier about the type of food that should be given
+Binding: Diet (Example)
+
+... excludeFoodModifier		0..*	CodeableConcept	Order-specific modifier about the type of food that should not be given
+Binding: Food Type Codes (Example)
+
+... outsideFoodAllowed		0..1	boolean	Capture when a food item is brought in by the patient and/or family
+... oralDiet	C	0..1	BackboneElement	Oral diet components
+.... type	Σ	0..*	CodeableConcept	Type of oral diet or diet restrictions that describe what can be consumed orally
+Binding: Diet Codes (Example)
+
+.... schedule		0..1	BackboneElement	Scheduling information for oral diets
+..... timing		0..*	Timing	Scheduled frequency of diet
+
+..... asNeeded		0..1	boolean	Take 'as needed'
+..... asNeededFor		0..1	CodeableConcept	Take 'as needed' for x
+Binding: SNOMED CT Medication As Needed Reason Codes (Example)
+.... nutrient		0..*	BackboneElement	Required nutrient modifications
+
+..... modifier		0..1	CodeableConcept	Type of nutrient that is being modified
+Binding: Nutrient Modifier Codes (Example)
+..... amount		0..1	SimpleQuantity	Quantity of the specified nutrient
+.... texture		0..*	BackboneElement	Required texture modifications
+
+..... modifier		0..1	CodeableConcept	Code to indicate how to alter the texture of the foods, e.g. pureed
+Binding: Texture Modifier Codes (Example)
+..... foodType		0..1	CodeableConcept	Concepts that are used to identify an entity that is ingested for nutritional purposes
+Binding: Texture Modified Food Type Codes (Example)
+.... fluidConsistencyType		0..*	CodeableConcept	The required consistency of fluids and liquids provided to the patient
+Binding: Fluid Consistency Type Codes (Example)
+
+.... instruction	Σ	0..1	string	Instructions or additional information about the oral diet
+... supplement	C	0..*	BackboneElement	Supplement components
+
+.... type	Σ	0..1	CodeableReference(NutritionProduct)	Type of supplement product requested
+Binding: Supplement Type Codes (Example)
+.... productName		0..1	string	Product or brand name of the nutritional supplement
+.... schedule		0..1	BackboneElement	Scheduling information for supplements
+..... timing		0..*	Timing	Scheduled frequency of diet
+
+..... asNeeded		0..1	boolean	Take 'as needed'
+..... asNeededFor		0..1	CodeableConcept	Take 'as needed' for x
+Binding: SNOMED CT Medication As Needed Reason Codes (Example)
+.... quantity		0..1	SimpleQuantity	Amount of the nutritional supplement
+.... instruction	Σ	0..1	string	Instructions or additional information about the oral supplement
+... enteralFormula	C	0..1	BackboneElement	Enteral formula components
+.... baseFormulaType	Σ	0..1	CodeableReference(NutritionProduct)	Type of enteral or infant formula
+Binding: Enteral Formula Type Codes (Example)
+.... baseFormulaProductName		0..1	string	Product or brand name of the enteral or infant formula
+.... deliveryDevice		0..*	CodeableReference(DeviceDefinition)	Intended type of device for the administration
+
+.... additive		0..*	BackboneElement	Components to add to the feeding
+
+..... type		0..1	CodeableReference(NutritionProduct)	Type of modular component to add to the feeding
+Binding: Enteral Formula Additive Type Code (Example)
+..... productName		0..1	string	Product or brand name of the modular additive
+..... quantity		0..1	SimpleQuantity	Amount of additive to be given or mixed in
+.... caloricDensity		0..1	SimpleQuantity	Amount of energy per specified volume that is required
+.... routeOfAdministration		0..1	CodeableConcept	How the formula should enter the patient's gastrointestinal tract
+Binding: Enteral Route Codes (Extensible)
+.... administration		0..*	BackboneElement	Formula feeding instruction as structured data
+
+..... schedule		0..1	BackboneElement	Scheduling information for enteral formula products
+...... timing		0..*	Timing	Scheduled frequency of enteral formula
+
+...... asNeeded		0..1	boolean	Take 'as needed'
+...... asNeededFor		0..1	CodeableConcept	Take 'as needed' for x
+Binding: SNOMED CT Medication As Needed Reason Codes (Example)
+..... quantity		0..1	SimpleQuantity	The volume of formula to provide
+..... rate[x]		0..1		Speed with which the formula is provided per period of time
+...... rateQuantity			SimpleQuantity	
+...... rateRatio			Ratio	
+.... maxVolumeToDeliver		0..1	SimpleQuantity	Upper limit on formula volume per unit of time
+.... administrationInstruction	Σ	0..1	markdown	Formula feeding instructions expressed as text
+... note		0..*	Annotation	Comments
+
+
+doco Documentation for this format icon
+See the Extensions for this resource
+
+ 
+
+Additional definitions: Master Definition XML + JSON, XML Schema/Schematron + JSON Schema, ShEx (for Turtle) + see the extensions, the spreadsheet version & the dependency analysis
+
+12.19.4.1 Terminology Bindings 
+Path	ValueSet	Type	Documentation
+NutritionOrder.status	RequestStatus	Required	
+Codes identifying the lifecycle stage of a request.
+
+NutritionOrder.intent	RequestIntent	Required	
+Codes indicating the degree of authority/intentionality associated with a request.
+
+NutritionOrder.priority	RequestPriority	Required	
+Identifies the level of importance to be assigned to actioning the request.
+
+NutritionOrder.foodPreferenceModifier	EncounterDiet (a valid code from Diet icon)	Example	
+This value set defines a set of codes that can be used to indicate dietary preferences or restrictions a patient may have.
+
+NutritionOrder.excludeFoodModifier	FoodTypeCodes	Example	
+This value set represents codes for types of foods and is provided as a suggestive example. It include codes from SNOMED CT icon where concept is-a 255620007 (Foods (substance)).
+
+NutritionOrder.oralDiet.type	DietCodes	Example	
+Codes that can be used to indicate the type of food being ordered for a patient. This value set is provided as a suggestive example. It includes codes from SNOMED CT icon where concept is-a 182922004 (Dietary regime (regime/therapy))
+
+NutritionOrder.oralDiet.schedule.asNeededFor	SNOMEDCTMedicationAsNeededReasonCodes	Example	
+This value set includes all clinical findings from SNOMED CT - provided as an exemplar value set.
+
+NutritionOrder.oralDiet.nutrient.modifier	NutrientModifierCodes	Example	
+NutrientModifier : Codes for types of nutrients that are being modified such as carbohydrate or sodium. This value set includes codes from SNOMED CT icon where concept is-a 226355009 (Nutrients(substance)), and the concepts for Sodium, Potassium and Fluid. This is provided as a suggestive example.
+
+NutritionOrder.oralDiet.texture.modifier	TextureModifierCodes	Example	
+TextureModifier: Codes for food consistency types or texture modifications to apply to foods. This value set is composed of SNOMED CT (US Extension and Core) Concepts from SCTID 229961002 Food consistency types (substance) hierarchy and is provided as a suggestive example.
+
+NutritionOrder.oralDiet.texture.foodType	TextureModifiedFoodTypeCodes	Example	
+TextureModifiedFoodType: Codes for types of foods that are texture-modified. This value set is composed SNOMED CT Concepts from SCTID 255620007 Foods (substance) and is provided as a suggestive example.
+
+NutritionOrder.oralDiet.fluidConsistencyType	FluidConsistencyTypeCodes	Example	
+FluidConsistencyType : Codes used to represent the consistency of fluids and liquids provided to the patient. This value set includes concepts from SNOMED CT icon(US Extension) where concept is a 435681000124103 (Dietary liquid consistency diet (regime/therapy)). It is provided as a suggestive example.
+
+NutritionOrder.supplement.type	SupplementTypeCodes	Example	
+SupplementType : Codes for nutritional supplements to be provided to the patient. This value set is composed of SNOMED CT (US Extension) Concepts from SCTID 470581016 (Enteral+supplement feeds hierarchy (product)) and is provided as a suggestive example.
+
+NutritionOrder.supplement.schedule.asNeededFor	SNOMEDCTMedicationAsNeededReasonCodes	Example	
+This value set includes all clinical findings from SNOMED CT - provided as an exemplar value set.
+
+NutritionOrder.enteralFormula.baseFormulaType	EnteralFormulaTypeCodes	Example	
+EnteralFormulaType : Codes for type of enteral formula to be administered to patient. This value set is composed of SNOMED CT (US Extension) Concepts from SCTID 470581016 (Enteral+supplement feeds hierarchy (product)) and is provided as a suggestive example.
+
+NutritionOrder.enteralFormula.additive.type	EnteralFormulaAdditiveTypeCode	Example	
+EnteralFormulaAdditiveType: Codes for the type of modular component such as protein, carbohydrate or fiber to be provided in addition to or mixed with the base formula. This value set is provided as a suggestive example.
+
+NutritionOrder.enteralFormula.routeOfAdministration	EnteralRouteCodes	Extensible	
+EnteralRouteOfAdministration: Codes specifying the route of administration of enteral formula. This value set is composed of HL7 V3 codes and is provided as a suggestive example.
+
+NutritionOrder.enteralFormula.administration.schedule.asNeededFor	SNOMEDCTMedicationAsNeededReasonCodes	Example	
+This value set includes all clinical findings from SNOMED CT - provided as an exemplar value set.
+
+
+12.19.4.2 Constraints 
+UniqueKey	Level	Location	Description	Expression
+img nor-1	Warning	(base)	Nutrition Order SHALL contain either Oral Diet , Supplement, or Enteral Formula class	oralDiet.exists() or supplement.exists() or enteralFormula.exists()
+
+12.19.5 Notes: 
+12.19.5.1 Enteral continuous vs. intermittent tube feedings 
+Tube feedings can be administered via continuous drip using a pump or via intermittent feedings, using gravity drip or a pump. The examples Nutrition Order Enteral Bolus Feeding Example and Nutrition Order Enteral Continuous Feeding Example show how this resource can be used to order both kinds of enteral feeding using the structured data elements. The continuous feeding typically specifies rate of administration and a maximum volume of delivery using the enteralFormula.administration.rate and enteralFormula.maxVolumeToDeliver elements. On the other hand, the intermittent feeding typically specifies the amount and frequency of administration using the enteralFormula.administration.quantity and enteralFormula.schedule elements. In both cases, to vary the rate or quantity over time the enteralFormula.administration element can be repeated.
+
+12.19.5.2 Note about the examples 
+The examples associated with this resource demonstrate the core elements and do not necessarily reflect real-world implementations that may be constrained by future profiles for a given implementation or setting. For example, a renal diet is often comprised of pre-coordinated components including common nutrient modifications such as protein, potassium and phosphorus to assist with the speed of entry of complex diet orders.
+
+12.19.6 Search Parameters 
+Search parameters for this resource. See also the full list of search parameters for this resource, and check the Extensions registry for search parameters on extensions related to this resource. The common parameters also apply. See Searching for more information about searching in REST, messaging, and services.
+
+Name	Type	Description	Expression	In Common
+additive	token	Type of module component to add to the feeding	NutritionOrder.enteralFormula.additive.type.concept	
+datetime	date	Return nutrition orders requested on this date	NutritionOrder.dateTime	
+encounter	reference	Return nutrition orders with this encounter identifier	NutritionOrder.encounter
+(Encounter)	29 Resources
+formula	token	Type of enteral or infant formula	NutritionOrder.enteralFormula.baseFormulaType.concept	
+group-identifier	token	Composite Request ID	NutritionOrder.groupIdentifier	
+identifier	token	Return nutrition orders with this external identifier	NutritionOrder.identifier	65 Resources
+oraldiet	token	Type of diet that can be consumed orally (i.e., take via the mouth).	NutritionOrder.oralDiet.type	
+patient	reference	The identity of the individual or set of individuals who requires the diet, formula or nutritional supplement	NutritionOrder.subject.where(resolve() is Patient)
+(Patient)	66 Resources
+provider	reference	The identity of the provider who placed the nutrition order	NutritionOrder.orderer
+(Practitioner, PractitionerRole)	
+status	token	Status of the nutrition order.	NutritionOrder.status	
+subject	reference	The identity of the individual or set of individuals who requires the diet, formula or nutritional supplement	NutritionOrder.subject
+(Group, Patient)	
+supplement	token	Type of supplement product requested	NutritionOrder.supplement.type.concept	
+FHIR ®© HL7.org 2011+. FHIR R5 hl7.fhir.core#5.0.0 generated on Sun, Mar 26, 2023 15:25+1100.
+Links: Search icon | Version History | Contents | Glossary | QA | Compare to R4 icon | Compare to R4B icon | CC0 | Propose a change iconlogo fhirRelease 5visit the hl7 websiteSearch CI-Build FHIR
+Home
+Getting Started
+Documentation
+Data Types
+Resource Types
+Terminologies
+Artifacts
+Implementation Guides icon
+link Diagnostics Observation
+This page is part of the FHIR Specification (v5.0.0: R5 - STU). This is the current published version. For a full list of available versions, see the Directory of published versions . Page versions: R5 R4B R4 R3 R2
+
+Content
+Examples
+Detailed Descriptions
+Mappings
+Operations
+Search Params
+Profiles
+Extensions
+R4 Conversions
+10.1 Resource Observation - Content 
+Orders and Observations icon Work Group	Maturity Level: N	 Normative (from v4.0.0)	Security Category: Patient	Compartments: Device, Encounter, Patient, Practitioner, RelatedPerson
+
+Measurements and simple assertions made about a patient, device or other subject.
+
+10.1.1 Scope and Usage 
+This resource is an event resource from a FHIR workflow perspective - see Workflow.
+
+Observations are a central element in healthcare, used to support diagnosis, monitor progress, determine baselines and patterns and even capture demographic characteristics, as well as capture results of tests performed on products and substances. Most observations are simple name/value pair assertions with some metadata, but some observations group other observations together logically, or even are multi-component observations. Note that the DiagnosticReport resource provides a clinical or workflow context for a set of observations and the Observation resource is referenced by DiagnosticReport to represent laboratory, imaging, and other clinical and diagnostic data to form a complete report.
+
+Uses for the Observation resource include:
+
+Vital signs such as body weight, blood pressure, and temperature
+Laboratory Data like blood glucose, or an estimated GFR
+Imaging results like bone density or fetal measurements
+Clinical Findings* such as abdominal tenderness
+Device measurements such as EKG data or Pulse Oximetry data
+Device Settings such as mechanical ventilator parameters.
+Clinical assessment tools such as APGAR or a Glasgow Coma Score
+Personal characteristics: such as eye-color
+Social history like tobacco use, family support, or cognitive status
+Core characteristics like pregnancy status, or a death assertion
+Product quality tests such as pH, Assay, Microbial limits, etc. on product and substance
+*The boundaries between clinical findings and disorders remains a challenge in medical ontology. Refer the Boundaries section below and in Condition for general guidance. These boundaries can be clarified by profiling Observation for a particular use case.
+
+10.1.1.1 Core Profiles for Observation Trial Use 
+The following core profiles for the Observation resource have been defined as well. If implementations use this Resource when expressing the profile-specific concepts as structured data, they SHALL conform to the following profiles:
+
+Profile	Description
+Vital signs	The FHIR Vital Signs profile sets minimum expectations for the Observation Resource to record, search and fetch the vital signs (e.g. temperature, blood pressure, respiration rate, etc.) associated with a patient
+10.1.2 Boundaries and Relationships 
+At its core, Observation allows expressing a name-value pair or structured collection of name-value pairs. As such, it can support conveying any type of information desired. However, that is not its intent. Observation is intended for capturing measurements and subjective point-in-time assessments. It is not intended to be used for those specific contexts and use cases already covered by other FHIR resources. For example, the AllergyIntolerance resource represents a patient allergies, MedicationStatement resource: medications taken by a patient, FamilyMemberHistory resource: a patient's family history, Procedure resource: information about a procedure, and QuestionnaireResponse resource: a set of answers to a set of questions.
+
+The Observation resource should not be used to record clinical diagnosis about a patient or subject that are typically captured in the Condition resource or the ClinicalImpression resource. The Observation resource is often referenced by the Condition resource to provide specific subjective and objective data to support its assertions, including symptoms and assessments of the presence or absence of diagnostically significant phenomena. Symptoms may sometimes be recorded as Conditions if no etiology has yet been identified, or if the symptom is severe enough to merit independent treatment, but in most cases a symptom can be represented in an Observation with a relationship to the Condition of concern. There will however be situations of overlap. For example, a response to a question of "have you ever taken illicit drugs" could in principle be represented using MedicationStatement, but most systems would treat such an assertion as an Observation. In some cases, such as when source data is coming from an HL7 V2 icon feed, a system might not have information that allows it to distinguish diagnosis, allergy and other "specialized" types of observations from laboratory, vital sign and other observation types intended to be conveyed with this resource. In those circumstances, such specialized observations may also appear using this resource. Adhering to such convention is an appropriate use of Observation. If implementers are uncertain whether a proposed use of Observation is appropriate, they're encouraged to consult with implementers on chat.fhir.org implementer's stream icon
+
+When an Observation instantiates an ObservationDefinition, the elements of the Observation resource are expected to inherit their content from the corresponding definitional elements declared in the ObservationDefinition resource listed here here.
+
+In contrast to the Observation resource, the DiagnosticReport resource typically includes additional clinical context and some mix of atomic results, images, imaging reports, textual and coded interpretation, and formatted representations. Laboratory reports, pathology reports, and imaging reports should be represented using the DiagnosticReport resource. The Observation resource is referenced by the DiagnosticReport to provide the atomic results for a particular investigation. "Laboratories routinely have a variable that is summative across a series of discrete variables - these are usually called 'impressions' or 'interpretations'. Sometimes they are algorithmically specified and sometimes they have the imprimatur of pathologists and they are conveyed in Observation or DiagnosticReport instead of the Clinical Impression resource. The Observation resource should not be used to record clinical diagnosis about a patient or subject as discussed above.
+
+10.1.3 References to this Resource 
+Implements: Event
+Resource References: AdverseEvent, AllergyIntolerance, Appointment, ChargeItem, ClinicalImpression... Show 23 more
+Extension References: FamilyMemberHistory Observation, Observation Precondition, Observation Replaces, Observation Sequel To, Procedure Caused By and Workflow Reason
+10.1.4 Resource Content 
+StructureUMLXMLJSONTurtleR4 DiffAll
+Structure
+
+Name	Flags	Card.	Type	Description & Constraintsdoco
+.. Observation	N		DomainResource	Measurements and simple assertions
++ Rule: dataAbsentReason SHALL only be present if Observation.value[x] is not present
++ Rule: If Observation.component.code is the same as Observation.code, then Observation.value SHALL NOT be present (the Observation.component.value[x] holds the value).
++ Rule: bodyStructure SHALL only be present if Observation.bodySite is not present
+
+Elements defined in Ancestors: id, meta, implicitRules, language, text, contained, extension, modifierExtension
+... identifier	Σ	0..*	Identifier	Business Identifier for observation
+
+... instantiates[x]	ΣTU	0..1		Instantiates FHIR ObservationDefinition
+.... instantiatesCanonical			canonical(ObservationDefinition)	
+.... instantiatesReference			Reference(ObservationDefinition)	
+... basedOn	Σ	0..*	Reference(CarePlan | DeviceRequest | ImmunizationRecommendation | MedicationRequest | NutritionOrder | ServiceRequest)	Fulfills plan, proposal or order
+
+... triggeredBy	TU	0..*	BackboneElement	Triggering observation(s)
+
+.... observation	Σ	1..1	Reference(Observation)	Triggering observation
+.... type	Σ	1..1	code	reflex | repeat | re-run
+Binding: triggered Bytype (Required)
+.... reason		0..1	string	Reason that the observation was triggered
+... partOf	Σ	0..*	Reference(MedicationAdministration | MedicationDispense | MedicationStatement | Procedure | Immunization | ImagingStudy | GenomicStudy)	Part of referenced event
+
+... status	?!Σ	1..1	code	registered | preliminary | final | amended +
+Binding: Observation Status (Required)
+... category		0..*	CodeableConcept	Classification of type of observation
+Binding: Observation Category Codes (Preferred)
+
+... code	ΣC	1..1	CodeableConcept	Type of observation (code / type)
+Binding: LOINC Codes (Example)
+... subject	Σ	0..1	Reference(Patient | Group | Device | Location | Organization | Procedure | Practitioner | Medication | Substance | BiologicallyDerivedProduct | NutritionProduct)	Who and/or what the observation is about
+... focus	ΣTU	0..*	Reference(Any)	What the observation is about, when it is not about the subject of record
+
+... encounter	Σ	0..1	Reference(Encounter)	Healthcare event during which this observation is made
+... effective[x]	Σ	0..1		Clinically relevant time/time-period for observation
+.... effectiveDateTime			dateTime	
+.... effectivePeriod			Period	
+.... effectiveTiming			Timing	
+.... effectiveInstant			instant	
+... issued	Σ	0..1	instant	Date/Time this version was made available
+... performer	Σ	0..*	Reference(Practitioner | PractitionerRole | Organization | CareTeam | Patient | RelatedPerson)	Who is responsible for the observation
+
+... value[x]	ΣC	0..1		Actual result
+.... valueQuantity			Quantity	
+.... valueCodeableConcept			CodeableConcept	
+.... valueString			string	
+.... valueBoolean			boolean	
+.... valueInteger			integer	
+.... valueRange			Range	
+.... valueRatio			Ratio	
+.... valueSampledData			SampledData	
+.... valueTime			time	
+.... valueDateTime			dateTime	
+.... valuePeriod			Period	
+.... valueAttachment			Attachment	
+.... valueReference			Reference(MolecularSequence)	
+... dataAbsentReason	C	0..1	CodeableConcept	Why the result is missing
+Binding: Data Absent Reason (Extensible)
+... interpretation		0..*	CodeableConcept	High, low, normal, etc
+Binding: Observation Interpretation Codes (Extensible)
+
+... note		0..*	Annotation	Comments about the observation
+
+... bodySite	C	0..1	CodeableConcept	Observed body part
+Binding: SNOMED CT Body Structures (Example)
+... bodyStructure	CTU	0..1	Reference(BodyStructure)	Observed body structure
+... method		0..1	CodeableConcept	How it was done
+Binding: Observation Methods (Example)
+... specimen	C	0..1	Reference(Specimen | Group)	Specimen used for this observation
++ Rule: If Observation.specimen is a reference to Group, the group can only have specimens
+... device		0..1	Reference(Device | DeviceMetric)	A reference to the device that generates the measurements or the device settings for the device
+... referenceRange	C	0..*	BackboneElement	Provides guide for interpretation
++ Rule: Must have at least a low or a high or text
+
+.... low	C	0..1	SimpleQuantity	Low Range, if relevant
+.... high	C	0..1	SimpleQuantity	High Range, if relevant
+.... normalValue	TU	0..1	CodeableConcept	Normal value, if relevant
+Binding: Observation Reference Range Normal Value Codes (Extensible)
+.... type	TU	0..1	CodeableConcept	Reference range qualifier
+Binding: Observation Reference Range Meaning Codes (Preferred)
+.... appliesTo		0..*	CodeableConcept	Reference range population
+Binding: Observation Reference Range Applies To Codes (Example)
+
+.... age		0..1	Range	Applicable age range, if relevant
+.... text	C	0..1	markdown	Text based reference range in an observation
+... hasMember	Σ	0..*	Reference(Observation | QuestionnaireResponse | MolecularSequence)	Related resource that belongs to the Observation group
+
+... derivedFrom	Σ	0..*	Reference(DocumentReference | ImagingStudy | ImagingSelection | QuestionnaireResponse | Observation | MolecularSequence | GenomicStudy)	Related resource from which the observation is made
+
+... component	ΣC	0..*	BackboneElement	Component results
+
+.... code	ΣC	1..1	CodeableConcept	Type of component observation (code / type)
+Binding: LOINC Codes (Example)
+.... value[x]	Σ	0..1		Actual component result
+..... valueQuantity			Quantity	
+..... valueCodeableConcept			CodeableConcept	
+..... valueString			string	
+..... valueBoolean			boolean	
+..... valueInteger			integer	
+..... valueRange			Range	
+..... valueRatio			Ratio	
+..... valueSampledData			SampledData	
+..... valueTime			time	
+..... valueDateTime			dateTime	
+..... valuePeriod			Period	
+..... valueAttachment			Attachment	
+..... valueReference			Reference(MolecularSequence)	
+.... dataAbsentReason		0..1	CodeableConcept	Why the component result is missing
+Binding: Data Absent Reason (Extensible)
+.... interpretation		0..*	CodeableConcept	High, low, normal, etc
+Binding: Observation Interpretation Codes (Extensible)
+
+.... referenceRange		0..*	see referenceRange	Provides guide for interpretation of component result
+
+
+doco Documentation for this format icon
+See the Extensions for this resource
+
+ 
+
+Additional definitions: Master Definition XML + JSON, XML Schema/Schematron + JSON Schema, ShEx (for Turtle) + see the extensions, the spreadsheet version & the dependency analysis
+
+10.1.4.1 Terminology Bindings 
+Path	ValueSet	Type	Documentation
+Observation.triggeredBy.type	TriggeredBytype	Required	
+Codes providing the type of triggeredBy observation.
+
+Observation.status	ObservationStatus	Required	
+Codes providing the status of an observation.
+
+Observation.category	ObservationCategoryCodes	Preferred	
+Observation Category codes.
+
+Observation.code	LOINCCodes (a valid code from LOINC icon)	Example	
+This value set includes all LOINC codes
+
+Observation.dataAbsentReason	DataAbsentReason	Extensible	
+Used to specify why the normally expected content of the data element is missing.
+
+Observation.interpretation	ObservationInterpretationCodes (a valid code from ObservationInterpretation icon)	Extensible	
+A categorical assessment, providing a rough qualitative interpretation of the observation value, such as “normal”/ “abnormal”,”low” / “high”, “better” / “worse”, “susceptible” / “resistant”, “expected”/ “not expected”. The value set is intended to be for ANY use where coded representation of an interpretation is needed.
+
+Notes:
+
+This is being communicated in v2.x in OBX-8 (Observation Interpretation), in v3 in ObservationInterpretation (CWE) in R1 (Representative Realm) and in FHIR in Observation.interpretation. Historically these values come from the laboratory domain, and these codes are extensively used. The value set binding is extensible, so codes outside the value set that are needed for interpretation concepts (i.e. particular meanings) that are not included in the value set can be used, and these new codes may also be added to the value set and published in a future version.
+
+Observation.bodySite	SNOMEDCTBodyStructures	Example	
+This value set includes all codes from SNOMED CT icon where concept is-a 442083009 (Anatomical or acquired body site (body structure)).
+
+Observation.method	ObservationMethods	Example	
+Observation Method codes from SNOMED CT icon where concept is-a 272394005 (Technique (qualifier value)) or is-a 129264002 (Action (qualifier value)) or is-a 386053000 (Evaluation procedure(procedure))
+
+Observation.referenceRange.normalValue	ObservationReferenceRangeNormalValueCodes (a valid code from ObservationreferenceRangeNormalValue)	Extensible	
+Codes that describe the normal value in the reference range, such as “Negative” or “Absent”
+
+Observation.referenceRange.type	ObservationReferenceRangeMeaningCodes	Preferred	
+This value set defines a set of codes that can be used to indicate the meaning/use of a reference range for a particular target population.
+
+Observation.referenceRange.appliesTo	ObservationReferenceRangeAppliesToCodes	Example	
+This value set defines a set of codes that can be used to indicate the particular target population the reference range applies to.
+
+Observation.component.code	LOINCCodes (a valid code from LOINC icon)	Example	
+This value set includes all LOINC codes
+
+Observation.component.dataAbsentReason	DataAbsentReason	Extensible	
+Used to specify why the normally expected content of the data element is missing.
+
+Observation.component.interpretation	ObservationInterpretationCodes (a valid code from ObservationInterpretation icon)	Extensible	
+A categorical assessment, providing a rough qualitative interpretation of the observation value, such as “normal”/ “abnormal”,”low” / “high”, “better” / “worse”, “susceptible” / “resistant”, “expected”/ “not expected”. The value set is intended to be for ANY use where coded representation of an interpretation is needed.
+
+Notes:
+
+This is being communicated in v2.x in OBX-8 (Observation Interpretation), in v3 in ObservationInterpretation (CWE) in R1 (Representative Realm) and in FHIR in Observation.interpretation. Historically these values come from the laboratory domain, and these codes are extensively used. The value set binding is extensible, so codes outside the value set that are needed for interpretation concepts (i.e. particular meanings) that are not included in the value set can be used, and these new codes may also be added to the value set and published in a future version.
+
+
+10.1.4.2 Constraints 
+UniqueKey	Level	Location	Description	Expression
+img obs-3	Rule	Observation.referenceRange	Must have at least a low or a high or text	low.exists() or high.exists() or text.exists()
+img obs-6	Rule	(base)	dataAbsentReason SHALL only be present if Observation.value[x] is not present	dataAbsentReason.empty() or value.empty()
+img obs-7	Rule	(base)	If Observation.component.code is the same as Observation.code, then Observation.value SHALL NOT be present (the Observation.component.value[x] holds the value).	value.empty() or component.code.where(coding.intersect(%resource.code.coding).exists()).empty()
+img obs-8	Rule	(base)	bodyStructure SHALL only be present if Observation.bodySite is not present	bodySite.exists() implies bodyStructure.empty()
+img obs-9	Rule	Observation.specimen	If Observation.specimen is a reference to Group, the group can only have specimens	(reference.resolve().exists() and reference.resolve() is Group) implies reference.resolve().member.entity.resolve().all($this is Specimen)
+
+10.1.5 Notes: 
+10.1.5.1 Profiling Observation 
+At its simplest, a resource instance can consist of only a code and a value, and status flag. The relevance of other properties will vary based on the type of observation. Profiles are created to provide guidance on capturing certain types of observations for a given use case. The Observation resource focuses on the level of detail captured by most systems. However, for a given use case there may be additional constraints and additional information relevant in certain circumstances. As with other resources, extensions can be used to introduce this additional complexity.
+
+10.1.5.2 Subject of an Observation 
+Typically, an observation is made about the subject - a patient, or group of patients, location, or device - and the distinction between the subject and what is directly measured for an observation is specified in the observation code itself ( e.g., "Blood Glucose") and does not need to be represented separately. However, three attributes may be used for representing the focus of the observation if it is not the subject itself. The specimen and bodySite elements are used to represent measurements taken on subject samples or anatomic and morphological locations, and focus represents specific aspect of the subject that are the point of attention such as another observation or a device implanted in a patient.
+
+10.1.5.3 Observation Grouping 
+Many observations need to be grouped together in some fashion to document critical relationships for interpretation of the observations. The methods to do so primarily are through DiagnosticReport using DiagnosticReport.result and Observation using Observation.component, Observation.hasMember, and Observation.derivedFrom. See the Diagnostics Module for guidance related to Microbiology reporting and relevant relationships necessary to support reflex, follow-up, and add-on orders.
+
+Note that Composition may also be used to organize observations and diagnostic reports, but that is only for purpose of readability, not to record critical relationships for interpretations. See DiagnosticReport.composition and Composition for further considerations for that separate purpose.
+
+10.1.5.3.1 DiagnosticReport.result 
+DiagnosticReport relates directly to an order (ServiceRequest). The DiagnosticReport.code names the panel and serves as the grouping element, which is traditionally referred to as a "panel" or "battery" by laboratories. The DiagnosticReport.result element references the individual observations. Several examples demonstrate observation grouping using DiagnosticReport as the grouping structure.
+
+10.1.5.3.2 Observation.component 
+Observation.component is used for any supporting result that cannot reasonably be interpreted and used outside the scope of the Observation it is a component of. Component observations may make up the separate and individual parts of the observation or may provide qualifying information to Observation.code and may only be able to be understood in relation to the Observation.code (for example, see the $stats operation). Therefore all code-value and component.code-component.value pairs need to be taken into account to correctly understand the meaning of the observation. Components should only be used when there is only one method, one observation, one performer, one device, and one time. Some use cases for using this structure include:
+
+Observations that are commonly produced and interpreted together. For example, systolic and diastolic blood pressure are represented as a single Blood pressure panel.
+Assessment tool results that are commonly produced and interpreted together. For example, a newborn Apgar score that is a single Observation with five components.
+Representing multiple answers to a question (relationship and boundaries between Observation and Questionnaire/QuestionnaireResponse). For example, reporting the types of alcohol consumed by a patient
+On the other hand, any observations that are clinically relevant outside the context of being a component of another observation should be represented by separate Observation resources. For example a Body Mass Index (BMI) Observation should not contain components for height and weight because they are clinically relevant observations on their own and should be represented by separate Observation resources. See the section below on how to relate independent Observations.
+
+
+10.1.5.3.3 Observation.hasMember of and Observation.derivedFrom 
+Observation.hasMember and Observation.derivedFrom and the core extensions: Observation-sequelTo icon and Observation-replaces icon are used for any supporting result that can be interpreted and used on its own and has one or more different values for method, observation, performer, device, time, and/or error conditions. Two common use cases for using this structure are:
+
+For grouping related observations such as for a "panel" or "battery". In this case the Observation.code represents the "panel" code, typically Observation.value[x] is not present, and the set of member Observations are listed in Observation.hasMember. This structure permits nested grouping when used with DiagnosticReport (e.g. complex micro isolate and sensitivities report) as described in the Diagnostics Module
+When linking to other Observations from which an Observation is derived. In this case both Observation.code and Observation.value[x] are present, and the linked observations are listed in Observation.derivedFrom. An example of this would be a Body Mass Index (BMI) Observation where the height and weight measurements are referenced.
+10.1.5.4 Using codes in Observation 
+When a result value is represented as a predefined concept using a code, valueCodeableConcept is used. This element is bound to a value set comprised of a standard nomenclature such as SNOMED CT or a source system ("local") coded result values.
+
+10.1.5.4.1 Multiple Codings 
+Results may be coded in multiple value sets based on different code systems and these may be mapped using the ConceptMap resource and/or given as additional codings directly in the element as shown in the example below.
+
+For example the LOINC 43304-5 Chlamydia trachomatis rRNA [Presence] in Unspecified specimen by Probe and target amplification method is typically associated with coded presence/absence concepts. Using the coded value for 'negative' with a standard code translation, valueCodeableConcept would be:
+
+
+		"valueCodeableConcept": {
+			"coding": [
+				{
+					"system": "http://snomed.info/sct",
+					"code": "260385009",
+					"display": "Negative"
+				}, {
+					"system": "https://acme.lab/resultcodes",
+					"code": "NEG",
+					"display": "Negative"
+				}
+			],
+			"text": "Negative for Chlamydia Trachomatis rRNA"
+		}
+
+		
+10.1.5.4.2 Text values for coded results: 
+When the data element is usually coded or the type associated with the code element defines a coded value, use valueCodeableConcept even if there is no appropriate code and only free text is available. For example using text only, the valueCodeableConcept element would be:
+
+
+		"valueCodeableConcept": {
+			"text": "uncoded free text result"
+		}
+
+				
+When a coded answer list includes a concept code for "other" and there is a free text description of the concept, the valueCodeableConcept.text element should be used to capture the full meaning of the source. In the example below, the answer code "Other" is provided in the valueCodeableConcept element and the text value supplied value in the CodeableConcept.text element.
+
+	{
+		"resourceType": "Observation",
+		... snip ...
+		"code": {
+			"coding": [
+				{
+					"system": "http://loinc.org",
+					"code": "74076-1",
+					"display": "Medication or substance involved"
+				}
+			]
+		},
+		.. snip ...
+		"valueCodeableConcept": {
+			"coding": [
+				{
+					"system": "http://loinc.org",
+					"code": " LA20343-2",
+					"display": "Other substance: PLEASE SPECIFY"
+				}
+			],
+			"text": "Other: Blue pills I found under my couch"
+		}
+		.. snip ...
+	}
+		   
+10.1.5.4.3 Interoperability Issues using code value pairs in FHIR 
+A recurring issue for many observation events, regardless of the particular pattern, is determining how to populate observation.code and observation.value. While this is typically straight-forward for laboratory observations, it can get blurry for other types of observations, such as findings and disorders, family history observations, etc. This discussion focuses on the way in which the coded representation of such statements is expressed using the Observation.code and Observation.value elements.
+
+There are two distinct facets that are central to a FHIR Observations:
+
+The action taken to make the finding and/or the property about which the property was observed. For example: measurement of blood hemoglobin.
+The result of the observation. For example: 14 g/dl.
+Several different ways of representing the same information exist using different combinations of the Observation.code and Observation.value. Unconstrained use of the alternatives presents a major challenge for computation of semantic equivalence and for safe interpretation of observations originating from different applications and users. The following four patterns could reasonably represent the same case. Considering that the Observation resource needs to support many use cases, the appropriate place to define the specific pattern is expected to be done through profiles and implementation guides as specified by the jurisdictions and/or organizations implementing FHIR:
+
+Observation.code represents the nature of the observation and the Observation.value a code represents the non-numeric result value. These are two distinct facets that are central to a FHIR Observations. For example:
+code=[Examination]
+value=[Abdomen tender]
+Observation.code is nearly identical to 1) above, but the level of granularity is shifted from the value to code. For example:
+code=[Abdominal examination]
+value=[Tenderness]
+The Observation.code is also expressed in a way that does not specify the observation action but indicates a statement about findings reduced to a single name (or term), as in the above item. In this example, the Observation.value is present and "qualifies" the finding typically confirming or refuting it. For example:
+code=[Abdominal tenderness]
+value=[found/true]
+in this example the Observation.code is expressed in a way that does not specify the observation action but indicates a statement about findings reduced to a single name (or term). In this particular example in that context, the Observation.value is omitted. For example:
+code=[Abdominal tenderness]
+value element is omitted
+10.1.5.4.4 Guidance: 
+Recommended rules for case 1 and 2 patterns:
+The Observation.code is preferably a LOINC icon concept code.
+If a SNOMED CT icon concept code is used, the expression SHOULD represent a 363787002 (Observable entity(Observable entity)) or 386053000 (Evaluation procedure(evaluation procedure))
+For non-numeric values, the Observation.value is preferably a SNOMED CT concept code.
+Recommended rules for case 3 pattern:
+The Observation.code is preferably a LOINC or SNOMED CT concept code.
+If a SNOMED CT concept code is used, the expression SHOULD represent a 404684003 (Clinical finding (finding)) , 413350009 (Finding with explicit context(finding)), or 272379006 (Event(event)).
+The Observation.value is represented by either
+valueBoolean
+valueCodeableConcept preferably using:
+SNOMED CT where concept is-a 362981000 (Qualifier value (qualifier value))
+v2 Yes/no Indicator
+v2 Expanded Yes/no Indicator (unfortunately is missing 'not given')
+Recommended rules for case 4 pattern:
+The Observation.code is preferably a SNOMED CT concept code where the concept is-a 404684003 (Clinical finding (finding)) , 413350009 (Finding with explicit context(finding)), or 272379006 (Event(event)).
+The Observation.value is omitted. The default interpretation is the concept (single code or expression) represented in Observation.code is present in the patient. An Observation.dataAbsentReason value of 'clinical-finding' SHOULD be used to indicate why the expected value is missing.
+SHOULD NOT use the Assertion pattern as described in HL7 Version 3 Implementation Guide: TermInfo - Using SNOMED CT in CDA R2 Models, Release 1 icon. ( The code is 'ASSERTION' and the value is a SNOMED CT concept or expression )
+10.1.5.5 Refining the interpretation of an Observation using additional codes or Observations 
+The following list provides guidance on using codes or other observations to provide additional context that may alter how an observation is interpreted.:
+
+If possible, use the most specific code you can
+
+e.g.:
+
+	{
+	"resourceType": "Observation",
+	... snip ...
+	"code": {
+		"coding": [
+			{
+				"system": "http://loinc.org",
+				"code": "6689-4",
+				"display": "Glucose [Mass/​volume] in Blood --2 hours post meal"
+			}
+		]
+	},
+	... snip ...
+	}
+			
+Alternatively, use additional codes in Observation.code as described above.
+
+e.g.: Observation.code = coding-1: 59408-5 Oxygen saturation in Arterial blood by Pulse oximetry, coding-2: 20564-1 Oxygen saturation in Blood
+
+	{
+	"resourceType": "Observation",
+	... snip ...
+	"code": {
+		"coding": [
+			{
+				"system": "http://loinc.org",
+				"code": "59408-5",
+				"display": "Oxygen saturation in Arterial blood by Pulse oximetry"
+			},
+			{
+				"system": "http://loinc.org",
+				"code": "20564-1",
+				"display": "Oxygen saturation in Blood"
+			}
+		]
+	},
+	... snip ...
+	}
+			
+As described above, observations are typically grouped together to provide additional information needed for correctly understanding and interpreting the observation. As an alternative to grouping observations, extensions may be used to provide references to other observations needed for understanding and interpreting an observation.
+
+Note to Implementers: We are seeking input from the implementer community in evaluating existing Observation Extensions for this purpose
+
+Feedback here icon.
+
+10.1.5.6 Value[x] and Datatypes 
+The element, Observation.value[x], has a variable name depending on the type as follows:
+valueQuantity
+valueCodeableConcept
+valueString
+valueBoolean
+valueInteger
+valueRange
+valueRatio
+valueSampledData
+valueTime
+valueDateTime
+valuePeriod
+valueAttachment
+
+See above section on Using codes for result values
+The Attachment data type is used to represent an observation result value if the actual value is a binary file such as an image. If the observation result value is derived from the binary file (for example 'X' detected and here is the the proof in this image), the binary file may be directly represented using DocumentReference and referenced in the Observation with derivedFrom. Images that are referenced as part of a report should be represented with DiagnosticReport.media or, if the entire report is in a binary format such as pdf, with DiagnosticReport.presentedForm.
+The Boolean data type is rarely used for value[x] because most observations result values are never truly Boolean due to exceptional values such as "unknown", therefore they should use the CodeableConcept data type instead and select codes from http://terminology.hl7.org/ValueSet/v2-0136 icon (these "yes/no" concepts can be mapped to the display name "true/false" or other mutually exclusive terms that may be needed")
+The special values "E" (error), "L" (below detection limit) and "U" (above detection limit) can be used are in the SampledData data type. However, when using valueQuantity in an observation for above and below detection limit values, valueQuantity should be used by stating the limit along with the comparator. In addition, when there is an error the dataAbsentReason element should be used with the appropriate value ('error' or 'NaN'). For example if the value was below the lower limit of detection of <2.0 mmol/L the valueQuantity would be:
+		"valueQuantity": {
+			"value": 2.0,
+			"comparator": "<",
+			"unit": "mmol/l",
+			"system": "http://unitsofmeasure.org",
+			"code": "mmol/L"
+		}
+	
+If the value was "NaN" (i.e. an error) the valueCodeableConcept element would be absent and dataAbsentReason element would be:
+		"dataAbsentReason": {
+			"coding": [
+				{
+					"system": "http://terminology.hl7.org/CodeSystem/data-absent-reason",
+					"code": "NaN",
+					"display": "Not a Number"
+				}
+			]
+		}
+		
+Because there are multiple types allowed for the value element, multiple value search parameters are defined. There is no standard parameter for searching values of type Ratio
+10.1.5.7 Physiologically Relevant Time of the Observation 
+The effectiveDateTime or effectivePeriod is the time that the observation is most relevant as an observation of the subject. For a biological subject (e.g. a human patient), this is the physiologically relevant time of the observation. In the case of an observation using a specimen, this represents the start and end of the specimen collection (e.g. 24-hour Urine Sodium), but if the collection time is sufficiently short, this is reported as a point in time value (e.g. normal venipuncture). In the case of an observation obtained directly from a subject (e.g. BP, Chest X-ray), this is the start and end time of the observation process, which again, is often reported as a single point in time.
+
+10.1.5.8 Reference Range 
+Most common observations will only have one generic reference range. Reference ranges may be useful for laboratory tests and other measures like systolic blood pressure but will have little relevance for something like "pregnancy status". Systems MAY choose to restrict to only supplying the relevant reference range based on knowledge about the patient (e.g. specific to the patient's age, gender, weight and other factors), but this might not be possible or appropriate. Whenever more than one reference range is supplied, the differences between them SHOULD be provided in the reference range and/or age properties.
+
+10.1.5.9 Canceled or Aborted Observations 
+If a measurement or test could not be completed (for example if the specimen is unsatisfactory or the provider cancelled the order), then the status value should be updated to "cancelled" and the specific details given - preferably as coded values in the dataAbsentReason or valueCodeableConcept element. Additional information may be provided in the `note` element as well. The specimen reject example demonstrates this using a coded value for unsatisfactory specimen in dataAbsentReason.
+
+10.1.5.10 Genomic Reporting - Trial Use 
+Genomic reporting makes heavy use of the DiagnosticReport and Observation resources to represent structured, computable genomic data. An implementation guide describing how to represent genetic results can be found here icon.
+
+Beyond the structured, computable data available in DiagnosticReport and Observation, metadata about the analysis performed is captured in the GenomicStudy resource. GenomicStudy aims at delineating relevant information of a genomic study. A genomic study might comprise one or more analyses, each serving a specific purpose. These analyses may vary in method (e.g., karyotyping, CNV, or SNV detection), performer, software, devices used, or regions targeted.
+
+When referencing genomic analysis from an Observation, the partOf attribute MAY be used to reference the GenomicStudy that led to this observation being made. Another option is that derivedFrom MAY be used to reference a DocumentReference when the observation was derived from the data in the file, even with that file was produced as part of a GenomicStudy output. Also, derivedFrom MAY be used to reference the GenomicStudy where the data was produced.
+
+10.1.6 Operations defined for Observation 
+10.1.6.1 Searching for the Last N Observations 
+The lastn query operation meets the common need for searching for the most recent or "last known" Observations for a subject. Examples where this query could be used:
+
+Fetch the last 5 temperatures for a patient to view trends
+Get the most recent laboratory results for patient
+Fetch the last 3 results for all vitals for a patient
+See the Last N Observations Query section in the Observation resource operations page for more information and examples
+
+
+10.1.6.2 Retrieving Statistics for Laboratory Observations 
+The stats operation performs a set of statistical calculations on a set of clinical measurements such as a blood pressure as stored on the server. This operation is focused on Observation resources with valueQuantity elements that have UCUM unit codes. Examples where this operation could be used:
+
+Get the average, min, max and count of a series of BP measurements for a patient
+Determine 20th or 80th percentile on a set of measurements over a time period
+See the Observation Statistics section in the Observation resource operations page for more information and examples
+
+10.1.7 Search Parameters 
+Search parameters for this resource. See also the full list of search parameters for this resource, and check the Extensions registry for search parameters on extensions related to this resource. The common parameters also apply. See Searching for more information about searching in REST, messaging, and services.
+
+Name	Type	Description	Expression	In Common
+based-on	reference	Reference to the service request.	Observation.basedOn
+(CarePlan, MedicationRequest, NutritionOrder, DeviceRequest, ServiceRequest, ImmunizationRecommendation)	
+category	token	The classification of the type of observation	Observation.category	
+code	token	The code of the observation type	Observation.code	22 Resources
+code-value-concept	composite	Code and coded value parameter pair	On Observation:
+  code: code
+  value-concept: value.ofType(CodeableConcept)	
+code-value-date	composite	Code and date/time value parameter pair	On Observation:
+  code: code
+  value-date: value.ofType(dateTime) | value.ofType(Period)	
+code-value-quantity	composite	Code and quantity value parameter pair	On Observation:
+  code: code
+  value-quantity: value.ofType(Quantity)	
+code-value-string	composite	Code and string value parameter pair	On Observation:
+  code: code
+  value-string: value.ofType(string)	
+combo-code	token	The code of the observation type or component type	Observation.code | Observation.component.code	
+combo-code-value-concept	composite	Code and coded value parameter pair, including in components	On Observation | Observation.component:
+  combo-code: code
+  combo-value-concept: value.ofType(CodeableConcept)	
+combo-code-value-quantity	composite	Code and quantity value parameter pair, including in components	On Observation | Observation.component:
+  combo-code: code
+  combo-value-quantity: value.ofType(Quantity)	
+combo-data-absent-reason	token	The reason why the expected value in the element Observation.value[x] or Observation.component.value[x] is missing.	Observation.dataAbsentReason | Observation.component.dataAbsentReason	
+combo-value-concept	token	The value or component value of the observation, if the value is a CodeableConcept	Observation.value.ofType(CodeableConcept) | Observation.component.value.ofType(CodeableConcept)	
+combo-value-quantity	quantity	The value or component value of the observation, if the value is a Quantity, or a SampledData (just search on the bounds of the values in sampled data)	Observation.value.ofType(Quantity) | Observation.value.ofType(SampledData) | Observation.component.value.ofType(Quantity) | Observation.component.value.ofType(SampledData)	
+component-code	token	The component code of the observation type	Observation.component.code	
+component-code-value-concept	composite	Component code and component coded value parameter pair	On Observation.component:
+  component-code: code
+  component-value-concept: value.ofType(CodeableConcept)	
+component-code-value-quantity	composite	Component code and component quantity value parameter pair	On Observation.component:
+  component-code: code
+  component-value-quantity: value.ofType(Quantity)	
+component-data-absent-reason	token	The reason why the expected value in the element Observation.component.value[x] is missing.	Observation.component.dataAbsentReason	
+component-value-canonical	uri	URL contained in valueCanonical.	Observation.component.value.ofType(canonical)	
+component-value-concept	token	The value of the component observation, if the value is a CodeableConcept	Observation.component.value.ofType(CodeableConcept)	
+component-value-quantity	quantity	The value of the component observation, if the value is a Quantity, or a SampledData (just search on the bounds of the values in sampled data)	Observation.component.value.ofType(Quantity) | Observation.component.value.ofType(SampledData)	
+component-value-reference	reference	Reference contained in valueReference.	Observation.component.value.ofType(Reference)
+(MolecularSequence)	
+data-absent-reason	token	The reason why the expected value in the element Observation.value[x] is missing.	Observation.dataAbsentReason	
+date	date	Clinically relevant time/time-period for observation	Observation.effective.ofType(dateTime) | Observation.effective.ofType(Period) | Observation.effective.ofType(Timing) | Observation.effective.ofType(instant)	27 Resources
+derived-from	reference	Related measurements the observation is made from	Observation.derivedFrom
+(GenomicStudy, Observation, ImagingStudy, MolecularSequence, ImagingSelection, QuestionnaireResponse, DocumentReference)	
+device	reference	The Device that generated the observation data.	Observation.device
+(Device, DeviceMetric)	
+encounter	reference	Encounter related to the observation	Observation.encounter
+(Encounter)	29 Resources
+focus TU	reference	The focus of an observation when the focus is not the patient of record.	Observation.focus
+(Any)	
+has-member	reference	Related resource that belongs to the Observation group	Observation.hasMember
+(Observation, MolecularSequence, QuestionnaireResponse)	
+identifier	token	The unique id for a particular observation	Observation.identifier	65 Resources
+method	token	The method used for the observation	Observation.method	
+part-of	reference	Part of referenced event	Observation.partOf
+(GenomicStudy, Immunization, MedicationDispense, MedicationAdministration, Procedure, ImagingStudy, MedicationStatement)	
+patient	reference	The subject that the observation is about (if patient)	Observation.subject.where(resolve() is Patient)
+(Patient)	66 Resources
+performer	reference	Who performed the observation	Observation.performer
+(Practitioner, Organization, CareTeam, Patient, PractitionerRole, RelatedPerson)	
+specimen	reference	Specimen used for this observation	Observation.specimen
+(Specimen, Group)	
+status	token	The status of the observation	Observation.status	
+subject	reference	The subject that the observation is about	Observation.subject
+(Practitioner, Group, Organization, BiologicallyDerivedProduct, NutritionProduct, Device, Medication, Patient, Procedure, Substance, Location)	
+value-canonical	uri	URL contained in valueCanonical.	Observation.value.ofType(canonical)	
+value-concept	token	The value of the observation, if the value is a CodeableConcept	Observation.value.ofType(CodeableConcept)	
+value-date	date	The value of the observation, if the value is a date or period of time	Observation.value.ofType(dateTime) | Observation.value.ofType(Period)	
+value-markdown	string	The value of the observation, if the value is a string, and also searches in CodeableConcept.text	Observation.value.ofType(markdown) | Observation.value.ofType(CodeableConcept).text	
+value-quantity	quantity	The value of the observation, if the value is a Quantity, or a SampledData (just search on the bounds of the values in sampled data)	Observation.value.ofType(Quantity) | Observation.value.ofType(SampledData)	
+value-reference	reference	Reference contained in valueReference.	Observation.value.ofType(Reference)
+(MolecularSequence)	
+FHIR ®© HL7.org 2011+. FHIR R5 hl7.fhir.core#5.0.0 generated on Sun, Mar 26, 2023 15:25+1100.
+Links: Search icon | Version History | Contents | Glossary | QA | Compare to R4 icon | Compare to R4B icon | CC0 | Propose a change icon

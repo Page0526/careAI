@@ -1,0 +1,942 @@
+Xin chào mn, mình xin được giới thiệu trước. Mình là Kim Mai, hiện đang học ths dinh dưỡng ĐH Y HN
+Em chào mọi người ạ, em tên là Phương Trang, hiện đang là sinh viên năm 4 tại trường đại học công nghệ của đại học quốc gia hà nội ạ, rất mong được hợp tác hiệu quả với mọi người ạ
+Em chào mọi người, em là Minh Khoa sinh viên năm 1 đại học Bách Khoa HCM mong được làm việc hiệu quả với mọi người ạ
+Xin chào các em và Mai, mình là Huyên, mình đang học ths dinh dưỡng trường Đại học Y Hà Nội. Mình rất vui khi được làm việc cùng mn!
+Oke vào việc, tình hình là sau khi đọc yêu cầu của cuộc thi, mn có ý tưởng nào loé lên trong đầu không?
+Còn về mong muốn cho đồng đội còn lại của chúng ta, thì chị đang tìm 1 bạn bên mảng kỹ thuật, có thông tin sẽ báo mn nhó
+Hi các em, Kim Mai! Mình có ý tưởng như sau, mong nhận được sự góp ý từ cả nhóm: Dự án xây dựng một trợ lý AI đóng vai trò 'Người giám sát dữ liệu số' dành riêng cho mảng Dinh dưỡng Nhi khoa nội trú. Thay vì chẩn đoán, AI này tập trung quét và làm sạch các sai sót logic trong bệnh án điện tử, giúp bác sĩ dinh dưỡng không còn phải mất công tra cứu thủ công qua nhiều mục phức tạp. AI tự động tổng hợp những thông số cốt lõi và chuẩn hóa dữ liệu theo chuẩn HL7 FHIR, giúp tích hợp linh hoạt với mọi phần mềm bệnh án điện tử (vì mỗi bệnh viện sẽ tự chọn 1 nhà cung cấp khác nhau). Kết quả là tạo ra dòng dữ liệu sạch, thông suốt để báo cáo trực tiếp lên Bộ Y tế và đảm bảo bác sĩ luôn đưa ra quyết định can thiệp dinh dưỡng dựa trên những con số chính xác nhất.
+@All
+@Huyên dạ em thấy cũng ok ạ, nhưng mà nỗi đau người dùng của mình là vấn đề dữ liệu của bác sĩ trong khoa này khi nhận được thì sẽ ở trạng thái có sai sót hay sao ạ
+Đó cũng là 1 lý do. Bác sĩ điều trị hoặc điều dưỡng nhập liệu sai số (nhầm cân nặng, chiều cao, chỉ số xét nghiệm). Nếu bác sĩ Dinh dưỡng dùng số sai này để tính toán năng lượng/dịch thì cực kỳ nguy hiểm cho trẻ. Thứ 2, là lúc check bệnh án để đưa ra hướng can thiệp thì bác sĩ dinh dưỡng phải mở 5-7 mục (xét nghiệm, cân nặng, chẩn đoán, y lệnh thuốc) mới tổng hợp được một bức tranh dinh dưỡng. Rất mất thời gian và dễ bỏ sót.
+Việc đưa ra can thiêp dinh dưỡng chính xác cũng sẽ giúp tạo ra sự an toàn cho bệnh nhi khi nằm viện nữa.
+@Kim Mai @Trang Phương cho minh xin góp ý nhé
+vì hạn của hub việt nam ghi là hết ngày 8/3, còn của TH CHAN Harvard là 6/3. nên để an toàn thì mình đưa ra phương án là nhóm gửi đơn trước 12h trưa nay.
+Vậy mình có nên lưu thông tin bệnh án của bệnh nhân, phụ huynh của trẻ có quyền truy cập. Để thuận tiện cho việc nhập viện hoặc đổi cơ sở khám chữa bệnh hông
+Ý tưởng em thấy ok nhưng mà sợ tính  khả thi chưa ổn, đặc biệt là ở phần kết nối với các bộ dữ liệu bệnh nhân, bệnh án điện tử
+@Huyên dạ chị cho em hỏi thêm về idea này là AI sẽ tự động check lại số liệu với cơ sở dữ liệu của bệnh viện để kiểm tra sai sót đúng không ạ
+Với việc check thông tin thì mình sẽ không cần dùng đến AI chỉ cần làm thuật toán truy xuất dữ liệu, để đối chiếu ạ, mình có thể focus vào phần tối ưu quy trình check thông tin cho bsi là một mô hình LLM sẽ đọc trước hết các thông tin bệnh nhân, tổng hợp lại và highlight các bệnh nhân có dấu hiệu bất thường
+@Minh Khoa cho c hỏi vs: về mặt IT thì phần này sẽ gặp khó khăn gì?
+Dạ ko có cơ sở dữ liệu mở để mình kết nối ạ
+Ví dụ hệ thống của bệnh viện mình ko kết nối đc
+Còn nếu làm giả lập thì mình ko có cơ sở
+@Kim Mai nếu mà lưu thông bệnh án thì phụ huynh giống như người vận chuyển dữ liệu, thì sẽ giải quyết được phần liên thông dữ liệu giữa các bệnh viện
+@Minh Khoa uk, còn nếu check sự logic của thông tin, dữ liệu thì mình sẽ dùng đến gì?
+@Minh Khoa để giả lập thì mình cần những gì!
+Mn ơi mình chốt tên nhóm để điền link đki nhen
+Em đề xuất tên CareAI ạ:D
+em thấy trong link đăng ký còn yêu cầu điền <150 từ mô tả ý tưởng nữa ạ
+@Huyên mình chỉnh sửa lại đoạn này một chút làm rồi làm mô tả có được không ạ
+@Huyên check sự logic của thông cụ thể như nào á chị, theo em đang hiểu là sẽ có 1 cái form, y tá điền thông tin vào, vấn đề xảy ra là y tá điền nhầm, ví dụ như chỉ số BMI, y ta điền sai 1m50 thành 1m20 trong khi cân nặng là 50kg, thành ra BMI sang trạng thái thừa cân chẳng hạn thì qua cái ngường an toàn mà bsi setup lúc đầu thì nó sẽ báo động bằng cách highlight lên cho bsi chú ý sự bất thường để ktra lại
+@Huyên có 2 phương án là mình cho random số liệu trong một ngưỡng hợp lý hoặc tự thu thập, nhưng mà ko ai kiểm chứng cái đó cho mình á chị
+@Minh Khoa uk phần này em hiểu đúng. Trong bệnh án còn các triệu chứng, ghi chú, bệnh sử, ... được viết dạng text. Thì bs dinh dưỡng sẽ cần kiểm tra hết các thông tin đó thì mới đưa ra được hướng can thiệp. Vậy nên nó sẽ check cả các ghi chú nữa
+chị có mẫu nào cho em xem thử đc ko, để em hình dung hướng làm, vì nếu có dạng text ghi chú trong đó thì khả năng mình phải dùng một mô hình ngôn ngữ để đọc text đó và đối chiếu với chuẩn mà bác sĩ đưa ra hoặc 1 tài liệu y khoa nào đó mà bệnh viện thống nhất sử dụng từ đó đưa ra cảnh báo, khúc này thì mình sẽ đưa AI vô được ạ
+C gửi mẫu này nhé
+https://docs.google.com/document/d/1RoRLZIzQerJ_cVuVrNrWWz89wnnBN3A2kof--YYeaIg/edit?usp=sharing
+Chị gửi nội dung mô tả câu: In 150 words or less, describe your idea or venture in an easy-to-understand way?
+Tên đội: CareAI
+Oke rồi á chị ơi
+Câu hỏi này: Select the stage most closely related to where you are right now.
+Mình chọn: Idea Stage
+https://airtable.com/app06PiI7r4PVqBdt/pagFJFqJW3xFqnRFw/form
+Link điền nha cả nhà @All
+hạn trước 24 đêm nay
+@Huyên chị cho em hỏi cái này điền cá nhân hay 1 người trong nhóm đại diện điền ạ
+à mỗi thành viên đều điền link nhá
+có mấy chỗ cần điền giống nhau chị nite ở trên, mn check lại nha
+Em điền rồi ạ
+em cũng điền rồi ạ
+
+mn nhận được mail này chưa?
+em nhận rồi á chị
+em vẫn chưa nhận được ạ
+Tui cũng vị
+@Trang Phương c cũng chưa nhận đc nhưng trong mail cc là có cả nhóm mình
+Nhóm mình có 1 bạn làm data science nữa
+C chưa thêm vào
+Vì bạn ý đang học quốc phòng
+@Huyên em cũng đang trong kì quốc phòng, sắp heets =)))
+Oh thế à
+nốt ngày mai nữa là em được thả
+Bạn này hết tháng này ms đc về
+@All hello mn, em nghĩ trong tuần này mình nên chốt phương án làm sản phẩm để sang tuần bắt đầu làm ạ
+Hackathon thì sản phẩm càng hoàn thiện, có đc prototype để trình bày càng tốt ạ
+Skip to main content
+Support the School
+
+Your gift powers excellence in research and education to advance public health.
+
+Close alert
+
+Search
+Giving
+Harvard T.H. Chan School of Public Health
+Degrees & Programs
+Admissions
+Faculty & Research
+
+Open Primary Navigation
+Home / Research Centers, Institutes, and Labs / Health Systems Innovation Lab / Our Work / HSIL Hackathon 2026 – Building High-Value Health Systems: Leveraging AI
+Health Systems Innovation Lab
+
+The Health Systems Innovation Lab is a global research and training lab that specializes in health system performance, health policy, and venture creation.
+
+Email
+hsinnovationlab@hsph.harvard.edu
+Follow
+linkedin
+instagram
+x
+Location
+677 Huntington Ave,
+Boston, MA 02115
+Building 1, 11th floor
+
+
+Jump to Section
+Home
+Our Work
+Team
+Resources
+Get Involved
+Jobs
+Events
+News
+HSIL Hackathon 2026 – Building High-Value Health Systems: Leveraging AI
+
+Where the world’s best minds reengineer the future of health systems. Join the 7th Edition to design, prototype, and pitch technology-powered solutions with real pathways to scale.
+
+Apply Now
+Application Instructions
+Participant Guidebook
+Frequently Asked Questions
+What is the HSIL Hackathon?
+The Health Systems Innovation Lab (HSIL) Hackathon is a transformative global event where innovators come together to design solutions that strengthen health systems. The Hackathon is an intensive, collaborative experience spanning 2 days where participants brainstorm, build, and pitch new ideas to tackle a specific challenge. The goal is to move from concept to a functional prototype or working product within the event’s timeframe.
+
+Every year, HSIL organizes the Hackathon in collaboration with partner countries and institutions around the world. In 2025, the HSIL Hackathon brought together over 500 teams across 19 hubs globally, making it the largest event of its kind to date.
+
+Following the Hackathon event, the winning teams are invited to participate in the Health Systems Innovation Lab Venture Incubation Program which spans multiple weeks and supports further development of each venture through structured educational sessions and mentorship.
+
+At its core, the Hackathon empowers participants to bridge the gap between theory and practice by encouraging unconventional thinking and practical implementation. The solutions developed during these events have the potential to revolutionize healthcare—improving patient care, enhancing operational efficiency, and strengthening the adaptability of health systems worldwide.
+
+Who should join?
+This initiative is open to all who are inspired to advance health systems through innovation. Previous hackathons have engaged students, clinicians, engineers, designers, policy analysts, entrepreneurs, and others – forming interdisciplinary teams at Harvard and partner hubs worldwide.
+
+Participants can join through their local hub as a team or individually.
+
+Timeline – 2026 (7th Edition)
+Dates reflect the 2026 Hackathon and Venture Building Program. Local hubs may run supplementary sessions.
+
+Application Period = Ongoing (Until spots for each hub are filled)
+HSIL Collaborative Hub Program = February 9 – March 6
+Speaker series open to all registered participants
+Mentorship opportunities
+Two-day Hackathon Event = April 10-11, 2026
+Winning teams from each hub (50 teams total) advance to Venture Building Program
+Venture Building Bootcamp 1 = April 20-May 1, 2026
+50 teams participate -> 20 teams advance
+HSIL Judging + Bootcamp 2 = May 4-May 15, 2026
+20 teams participate -> 10 finalists advance
+Global Judging Window = May 18-June12, 2026
+Finalist refinement + global panel
+Demo Day = June 19, 2026
+Pitches to investors & awards
+Hackathon Event
+The Hackathon is an intensive, collaborative experience spanning 2 days where participants brainstorm, build, and pitch new ideas to tackle a specific challenge.
+
+
+Venture Building Program
+Following the hackathon, HSIL runs a remote Venture Incubation Program to help selected teams develop their ideas into viable ventures.
+
+The Venture Building Program operates remotely and is structured in three phases over eight weeks:
+
+
+See all ventures incubated
+Learn more about the HSIL Venture Incubation Program
+2026 Collaborating Hubs
+Partner institutions host local build sites across five continents. Once applications open, team members from each hub can find their dedicated workspace below.
+
+
+USA – Boston
+
+
+Argentina – Buenos Aires
+
+
+Australia – Sydney
+
+
+
+
+
+
+
+
+Bangladesh – Dhaka
+
+
+Brazil – Rio Grande do Norte
+
+
+
+Brazil – São Paulo
+
+
+
+
+
+Canada – Hamilton
+
+
+
+Canada – Toronto
+
+
+
+Chile – Santiago
+
+
+
+
+
+
+China – Beijing
+
+
+Colombia – Bogotá
+
+
+Egypt – Cairo
+
+
+Ethiopia – Addis Ababa
+
+
+
+France – Lyon
+
+
+Ghana – Accra
+
+
+
+
+
+
+
+
+
+India – Patna, Bihar / Bhubaneswar
+
+
+Indonesia – Jakarta
+
+
+Italy – Milan
+
+
+
+
+Kazakhstan – Astana
+
+
+Lebanon – Beirut
+
+
+
+
+Malaysia – Kuala Lumpur
+
+
+
+
+
+
+
+
+Mexico – Monterrey
+
+
+
+
+Nepal – Kathmandu
+
+
+Nigeria – Ogun
+
+
+Pakistan – Gujranwala
+
+
+
+
+Pakistan – Islamabad
+
+
+Portugal – Lisbon
+
+
+Rwanda – Kigali
+
+
+
+
+Saudi Arabia – Riyadh
+
+
+Singapore – Singapore
+
+
+South Africa – Cape Town
+
+
+South Africa – Johannesburg
+
+
+Spain – Madrid
+
+
+
+Taiwan
+
+
+Thailand – Bangkok
+
+
+Türkiye – Istanbul
+
+
+UAE – Abu Dhabi
+
+
+UK – Cambridge
+
+
+
+
+UK – London
+
+
+Vietnam – Hanoi
+
+
+
+
+Zimbabwe – Harare
+
+
+
+
+Previous Hackathons
+
+2025
+
+2024
+
+2023
+
+2022
+
+2021
+Collaborating Institutions
+Orrick
+
+PATH
+
+Microsoft
+
+InterSystems
+
+TNT
+
+Discovery
+
+Contact
+Questions about eligibility, partnerships or data access? Email us at hsilhackathon@hsph.harvard.edu.
+
+Location
+677 Huntington Avenue, Boston MA 02115 – Building 1, 11th floor
+
+Unleash your potential at Harvard Chan School.
+In addition to our degree programs, we offer highly targeted executive and continuing education, directed and taught by Harvard faculty.
+
+Degree Programs
+How to Apply
+Executive and Continuing Education
+Harvard T.H. Chan School of Public Health
+Administrative Offices
+Public Health Resources
+Jobs
+my.harvard
+Intranet
+Make a Gift
+Contact
+Accessibility
+Digital Accessibility
+Privacy Statement
+Nondiscrimination Policy
+Report Copyright Infringement
+Report Security Issue
+Trademark Notice
+
+Public health insights in your inbox.
+Stay connected with newsletters on climate, nutrition, communication — and the latest from Harvard Chan School.
+
+Subscribe
+677 Huntington Avenue, Boston, MA 02115
+© 2026 The President and Fellows of Harvard College
+youtube
+linkedin
+instagram
+tiktok
+threadsHealth Systems Hackathon Participant Guide
+Health Systems Innovation Lab, Harvard University, 2026 © 1
+Harvard Health Systems Innovation Lab
+2026 Hackathon Guide for Participants
+Thank you for joining us at the 7th Health Systems Innovation Hackathon! The Harvard
+Health System Innovation Lab (HSIL) organizes a Hackathon every year in collaboration with
+our partners around the world. The Hackathon is a transformative event with a clear mission:
+to empower innovators to develop innovative solutions that improve health systems. This
+dynamic and collaborative event brings together students, young professionals, and experts
+from diverse fields to address critical health system challenges through innovation. By bringing
+together professionals from different backgrounds, it fosters cross-disciplinary collaboration
+and unconventional thinking to develop innovative solutions. Teams are supported to develop
+groundbreaking and practical solutions that can challenge the status quo and transform
+healthcare, bridging the gap between theory and practice. Teams will not only collaborate
+intensively during the event but hopefully also establish relationships and networks that extend
+beyond their duration. In summary, the HSIL Hackathon is a powerful platform for innovation
+and collaboration dedicated to improving healthcare systems around the world.
+The 2026 Hackathon
+This year’s Hackathon will take place on Friday 10th and Saturday 11th April 202 and the
+theme is: ‘Building High-Value Health Systems: Leveraging Artificial Intelligence’.Health Systems Hackathon Participant Guide
+Health Systems Innovation Lab, Harvard University, 2026 © 2
+Content
+How is the Hackathon organized? ........................................................................................ 3
+Event Program ...................................................................................................................... 4
+Team Criteria ........................................................................................................................ 4
+Team Formation and Digital Platform .................................................................................. 5
+Slack Instructions .................................................................................................................. 6
+Challenges ............................................................................................................................ 8
+AI & Ethics........................................................................................................................... 11
+What to expect for the pitch? ............................................................................................ 12
+Mentoring ........................................................................................................................... 12
+Judging ............................................................................................................................... 13
+Judging rubric for Health Systems Innovation Hackathon.................................................. 14
+What happens after the Hackathon? ................................................................................ 15
+Resources & Data Sources on Top Killer Diseases ............................................................ 16Health Systems Hackathon Participant Guide
+Health Systems Innovation Lab, Harvard University, 2026 © 3
+How is the Hackathon organized?
+The Hackathon is organized as a two-day in-person event in several Hubs across the different
+continents. Over the two-day Hackathon, teams will identify a pressing local or global health
+system challenge and develop an innovative solution to it. Teams will have access to mentors
+who have healthcare expertise and health innovation experience. They will advise the teams,
+challenge their assumptions, and provide feedback on their pitch. Teams will get ready to
+present their solution in front of a local judging panel by the end of the two days.
+Each Hackathon Hub is managed by a dedicated local organizer who ensures that all aspects
+of the event run smoothly. Local hub organizers will provide the necessary resources to host
+the event and will not charge any fees from participants. Should you have any questions
+regarding your local participation, please reach out directly to the local Hub organizers. They
+are your primary point of contact and are equipped to assist you with any inquiries or needs
+you may have during the event.Health Systems Hackathon Participant Guide
+Health Systems Innovation Lab, Harvard University, 2026 © 4
+Event Program
+Welcome
+To kick-start our event, we will host a global online welcome session tailored to connect with
+all participating hubs. More information about the local Hubs agenda will be provided by your
+local Hub organizer prior to the event.
+Keynote Panels
+The event will begin with an Opening Panel on “AI-Driven Digital Solutions for Building
+High-Value Health Systems” moderated by Prof. Rifat Atun from Harvard University. Join
+our panel of esteemed experts as they explore how AI and digital innovations are
+revolutionizing health systems, providing cutting-edge insights into creating high-value
+healthcare solutions.
+On the second day, all hubs will further engage with another compelling session focused on
+“Empowering Women in HealthTech.” This panel will delve into the vital contributions and
+growing influence of women in the health technology sector. Leading female innovators and
+leaders will share their experiences, challenges, and strategies for success, inspiring
+participants to foster diversity and inclusion in the tech-driven health landscape. Both panels
+aim to equip attendees with actionable insights and inspire a new era of transformative health
+solutions.
+The Opening Panel will be followed by a “Hack 101” presentation with instructions, mentoring
+introductions and reminders on the hackathon.
+Team Criteria
+Our Hackathon is primarily focused on supporting early-stage innovations, offering an ideal
+environment for individuals and teams to develop and refine their ideas. While teams with
+mature innovations are welcome, the event is geared toward those in the initial stages of their
+journey.Health Systems Hackathon Participant Guide
+Health Systems Innovation Lab, Harvard University, 2026 © 5
+During the two-day Hackathon, participants can choose to either identify a health system
+challenge or work on a pre-existing idea related to health and AI. We have outlined 11 priority
+challenges in the “Challenges” chapter below.
+We suggest forming teams of 3-5 members and highly recommend building teams with a
+diversity of backgrounds and skills to enrich the innovation process. Whether joining as
+individuals, teams, or early-stage startups, participants can work on either non-profit or for-
+profit venture ideas. To fully engage in the Post-Hackathon Venture Incubation Program and
+Bootcamp conducted in English, it is essential that at least one to two team members are
+proficient in the language.
+Our eligibility criteria are inclusive, encouraging participation from both students and
+professionals. In previous years, we've seen a vibrant mix of participants, from students to
+young professionals each contributing uniquely to the Hackathon's collaborative spirit.
+Prototyping and Presentation
+There is no requirement for teams to present fully working prototypes during the pitches.
+Concept-stage ideas are welcome, and we're open to creative presentation methods. The key is
+for teams to convey a clear understanding of how their prototype would function. Judges will
+be looking for compelling presentations that effectively communicate the concept and potential
+impact of your innovation.
+Team Formation and Digital Platform
+Once applicants are accepted and their participation in the Hackathon is confirmed, they will
+have the opportunity to join a joint Q&A session via Zoom, scheduled for at least two weeks
+before the event by their local Hub. This session will allow participants to introduce
+themselves, discuss their interest in specific tracks and challenges, and ask any questions they
+may have.
+In addition, Slack groups for each Hub will be organized and accepted participants will be
+asked to create a profile and share information about their background, areas of interest in the
+Hackathon and skills they can bring to a team. From there, participants will be asked to form
+teams on Slack before the Hackathon begins.Health Systems Hackathon Participant Guide
+Health Systems Innovation Lab, Harvard University, 2026 © 6
+Slack Instructions
+Purpose of Using Slack for the Hackathon
+Slack will serve as the primary communication platform for the HSIL Hackathon, facilitating
+interactions among participants, organizers, mentors, and judges. Key features include:
+• Central Communication Hub: For sharing logistics, announcements, and important
+details for participants.
+• Direct Messaging: Enables participants to form teams, ask questions, and engage
+directly with anyone in the workspace.
+Joining the HSIL Slack Workspace
+• Access the Workspace: Go to the following link to initiate joining the
+HSIL Slack workspace: (link will be provided once accepted)
+• Create Your Account: Follow the prompt to create an account using your email
+address.
+• Explore the Workspace: Once your account is set up, you'll have access to all public
+channels within the HSIL Slack.
+• Optional Steps for Enhanced Accessibility:
+• Slack App: Download the Slack desktop or mobile app for a more seamless
+experience. Log in to access the HSIL Slack space.
+• Browser Access: Alternatively, the HSIL Slack can be accessed directly through any
+web browser.
+Navigating to Relevant Channels
+• Finding Channels: On the Slack Home page, look for the "Channels" section. Click the
+dropdown arrow next to it, select "Manage," and then choose "Browse Channels" to
+view available channels.
+• Joining Channels: Select and join channels relevant to your hub within the Hackathon.
+• Access to Locked Channels: If certain channels are restricted, Slack admins will add
+you to them as needed. For access to specific locked channels, please reach out via
+email/Slack to the local organizing team.
+• Join the following Hub channels on Slack and get started:
+• #[location]-hub: All participants are requested to join this channel.
+This channel will help you stay informed with important announcements and updatesHealth Systems Hackathon Participant Guide
+Health Systems Innovation Lab, Harvard University, 2026 © 7
+regarding the hackathon at your respective hub. Be sure to check here regularly for
+any news, changes, or reminders.
+#[location]_teams_finalized: If you already have finalized a team, please join this
+channel. This channel will allow you to interact with others to network and learn from
+each other. Use this space to introduce your team, connect with other teams, and share
+resources that may be useful for the Hackathon.
+• #[location]_teams_in_the_making: Participants looking for additional team
+members - join this channel.
+If you're a lone wolf with a vision for a team or a team looking for more members,
+please join this channel. Share your team concept, desired track, and the number of
+members you're seeking. Use this channel to scout for potential teammates or explore
+existing teams in need of additional members.
+• #[location]_individuals: Participants joining the hackathon alone, please join this
+channel.
+This channel will help you find teammates and form a winning team! Share a brief
+introduction about yourself, including your interests and the tracks you're passionate
+about, and reach out to others on the channel to make a team.
+• #[location]-hub_q_and_a: All participants are requested to join this channel.
+Have questions about the hackathon? Need clarification on rules, logistics, or
+anything else related to the event? This channel will help answer your queries and
+provide support. Feel free to ask the organizers anything, and we'll do our best to
+assist you.Health Systems Hackathon Participant Guide
+Health Systems Innovation Lab, Harvard University, 2026 © 8
+Challenges
+These challenges are intended purely as a guide. You are encouraged to think creatively,
+innovate, and push the boundaries of your fields. We introduce some of the practical challenges
+faced across health systems but it is not an exhaustive list.
+Artificial Intelligence and Healthcare
+Recent developments in Artificial Intelligence (AI) present exciting possibilities for healthcare,
+a field characterized by vast amounts of data. Using AI to efficiently analyze this data can
+enhance both quality and operational efficiency in patient care. AI in healthcare offers
+transformative potential by analyzing vast medical datasets to improve diagnostic accuracy,
+predict disease risks, and enhance patient care outcomes beyond current human capabilities.
+Selected cross-cutting Health Systems challenges
+1. Electronic Health Record Analysis
+Electronic health records (EHRs) have revolutionized the healthcare industry, allowing
+confidential patient information to be viewed by clinicians from anywhere in the world. They
+have also led to a boom in the volume of patient information which can be overwhelming but
+also presents an opportunity to innovate. The manual analysis of complex or lengthy patient
+records can be highly time-consuming. What systems can be created to analyze EHRs to form
+predictive models for patient’s diagnoses, disease trajectories and outcomes?
+2. Diagnosis and monitoring improvements
+Traditional diagnosis and condition monitoring is done through in-person consultations with
+human-to-human observation. AI and ML are revolutionizing diagnosis and condition
+monitoring by enhancing data analysis, identifying patterns that may be overlooked by humans,
+and offering improved predictive analytics. These technologies analyze large datasets to predict
+disease progression and tailor personalized treatment plans. In imaging and diagnostics, AI
+algorithms can interpret medical images like X-rays and MRIs with remarkable accuracy,
+surpassing traditional methods. Additionally, AI facilitates remote monitoring through apps
+and wearable devices, processing real-time health data to enable timely interventions. What
+AI-driven diagnostic or monitoring tools can be developed to detect patient changes earlier,
+allowing for timely treatment adjustments to prevent negative outcomes?
+3. Intelligent Support ChatbotsHealth Systems Hackathon Participant Guide
+Health Systems Innovation Lab, Harvard University, 2026 © 9
+With the rise of AI, chatbots have become increasingly powerful. They are now used by some
+for entertainment, education and work. But there also exist various opportunities in the
+healthcare sector for both patients and medical staff. Which AI and Large Language Models
+can be used to develop a chatbot that assists patients and medical staff (e.g. by directing them
+to resources or enhancing clinical decision-making)?
+4. Fragmentation of Care
+Patients frequently transition between various health systems, each often equipped with its own
+electronic health records (EHR) systems. Even within a single health network, mental health
+services and primary care often run on incompatible or poorly integrated platforms. Machine
+learning models that can dynamically adapt to sustain performance across different systems
+would save healthcare providers both time and money. What systems or models could be
+implemented to overcome these issues?
+5. Too Much Information?
+There is more data created every single second than one person could get through in a lifetime.
+Across almost every field, there is more information than a person can reasonably comprehend.
+In the field of mental health for example, there are more than 60,000 data points, and over
+10,000 applications. However, the quality and effectiveness of these apps vary significantly,
+with many lacking substantial evidence to support their claims. This abundance of options can
+make it challenging for users to identify apps that are both reliable and beneficial for their
+health needs. How can we best match people with the health services or trustworthy apps that
+would suit them best?
+6. Shortage of healthcare workers
+A shortage of healthcare workers, including physicians, nurses, and health professionals, poses
+a significant challenge in many regions around the world. The demand for healthcare services
+often exceeds the available workforce, leading to long waiting times for appointments, limited
+access to specialized care, and suboptimal management of many conditions. Additionally, the
+shortage of healthcare workers can result in increased workload and burnout among existing
+staff, further compromising the quality of care provided to patients. How can we leverage AI
+to develop strategies that mitigate healthcare worker shortages in regions where demand
+surpasses workforce availability?Health Systems Hackathon Participant Guide
+Health Systems Innovation Lab, Harvard University, 2026 © 10
+7. Fragmented Care Pathways
+In healthcare systems worldwide, fragmented care pathways have emerged as a significant
+obstacle to providing comprehensive and effective care. Fragmentation occurs when there is a
+lack of coordination and continuity in healthcare delivery across different providers, settings,
+and stages of care. This often leads to disjointed communication, duplicated tests, conflicting
+treatment plans, and gaps in follow-up, ultimately compromising patient outcomes and
+experiences. How can healthcare systems use AI to address fragmented care pathways by
+enhancing coordination, communication, and continuity, ultimately improving patient
+outcomes and maximizing resource efficiency?
+8. Health literacy
+Poor health literacy hinders effective healthcare, as patients may misinterpret symptoms like
+distress or discomfort, delaying diagnosis and treatment. Misunderstandings about physical
+and mental health contribute to stigma and inadequate care-seeking. Improving health literacy
+empowers individuals to recognize symptoms, make informed decisions, and dispel myths.
+How can we leverage AI to improve overall health literacy, particularly focusing on those
+directly affected by health conditions or those in supportive roles?
+9. Preventive Health Engagement
+AI is revolutionizing preventive health engagement by enabling personalized, proactive health
+management. Through data analysis and predictive modeling. AI-powered tools can offer
+tailored health recommendations, monitor lifestyle habits, and remind patients of screenings or
+vaccinations, enhancing adherence to preventive measures. Additionally, AI chatbots and
+virtual health assistants provide accessible support and information, empowering individuals
+to take charge of their health. How can AI be used to create personalized preventive health
+programs that analyze individual health data, environmental factors, and social
+determinants to deliver targeted, actionable recommendations? Could machine learning
+models predict individual health risks and suggest specific interventions before
+conditions develop?
+10. Breaking communication barriers
+AI is transforming communication in medicine by bridging the gap between complex medical
+information and patient understanding. Advanced AI systems can translate medical jargon,
+such as lab results and diagnostic reports, into simple, clear language that laypeople can easily
+comprehend. This empowers patients to make informed decisions about their healthcare. AIHealth Systems Hackathon Participant Guide
+Health Systems Innovation Lab, Harvard University, 2026 © 11
+tools can also provide multilingual support. By enhancing communication, AI contributes to
+more inclusive and effective patient care. What are additional ways AI could enhance
+communication between patients and their care teams?
+11. AI in Pediatrics
+Using AI in pediatric health care holds the promise to improve the accuracy and efficiency of
+diagnoses and treatments for young patients, especially for rare pediatric diseases. A major
+factor that distinguishes AI use in pediatrics from its application in adult care is data
+complexity. Varying developmental stages and growth add complexity to any analysis.
+Children change providers frequently and files often include input from various data sources
+(e.g. caregivers, clinicians and teachers). Higher thresholds for privacy and data security
+complicate access to pediatric datasets. How can AI be used to integrate data from diverse
+sources to provide a comprehensive view of a child’s health? How can AI solutions be
+designed to adapt to the different developmental phases of children?
+AI & Ethics
+Since the theme of this year’s Hackathon is Artificial Intelligence (AI), please keep in mind
+that it’s an evolving field. AI and machine learning (ML) models are only as good as the data
+given to them. When building AI solutions, carefully consider how algorithmic biases could
+unfairly impact different patient groups and work to prevent these disparities.
+AI in healthcare requires careful consideration of data biases and ethical implications.
+Healthcare data often reflects existing inequalities, which AI systems can amplify if not
+properly addressed. Key challenges include protecting patient privacy, preventing algorithmic
+discrimination, maintaining human oversight of AI decisions, and addressing disparities in
+access to technology and digital literacy.
+More info: WHO Ethics and governance of artificial intelligence for health: Guidance on large
+multi-modal models < https://www.who.int/publications/i/item/9789240084759>Health Systems Hackathon Participant Guide
+Health Systems Innovation Lab, Harvard University, 2026 © 12
+What to expect for the pitch?
+At the end of the hack, you and your team will deliver a 3-minute presentation, or “pitch” on
+your idea. With limited time, structure your pitch to ensure you cover all key points. Practice
+the pitch a few times before delivering it – this will not only help you remember the crucial
+points but also increase your comfort level when it's time to pitch. Be sure to allocate time to
+explain the technical aspects, your decision-making process, and showcase a demo of your
+solution.
+Considering most hackathon pitches last 3 minutes, here’s a rule of thumb for maximizing your
+impact within that tight timeframe:
+• Introduction (10 seconds): Briefly introduce yourself and your team in a memorable
+way. Since people recall more easily how things start and finish, ensure your
+introduction makes a lasting impression as the judges deliberate.
+• Problem statement (20 seconds): Clearly describe the problem you are addressing.
+Whose lives can be improved by your solution, and what tangible impact will it have?
+• Product (1 minute): Explain the technical aspects of your idea. Provide enough detail
+to demonstrate your technical expertise and decision-making process, without
+overwhelming your audience with excessive information.
+• Demo (1 minute): Support your product presentation with a live demo (if possible) or
+use visualization tools to mockup the design, functionality, and key features
+• Wrap-up (30 seconds): Summarize the main points of your pitch and end with a strong
+closing statement.
+Mentoring
+Each team will get support from local mentors in person in each Hub over the two-day event.
+The mentors have diverse skills and expertise to guide teams composed of students and young
+professionals from fields such as medicine, engineering, public health, and beyond. We have
+subject matter experts in healthcare offering clinical insights and understanding patient needs;
+healthcare technology specialists with experience in digital health and medical devices;
+professionals with backgrounds in engineering and artificial intelligence for technical
+guidance; public health and policy experts to navigate broader healthcare landscapes; design
+thinking and user experience specialists to prioritize user needs; entrepreneurs and business
+professionals to assist with business models and market analyses; effective communicators and
+presenters to help teams convey their ideas; and adaptable problem-solvers capable of
+addressing challenges and unforeseen issues.Health Systems Hackathon Participant Guide
+Health Systems Innovation Lab, Harvard University, 2026 © 13
+Local mentors will be available on-site to support teams with short questions or during 1:1
+team mentoring sessions. Teams can sign up for mentoring via the schedules provided through
+Slack.
+Judging
+All teams will be given 3 minutes to pitch their innovation in front of local judges on the 2nd
+day of the Hackathon, April 11th . The judging panel will consist of three to five local judges
+collectively bringing in clinical, technical, and business expertise.
+The judging panel will consist of three to five judges collectively bringing in clinical, technical,
+and business expertise. The judging panel will identify the best digital health solutions with a
+high potential for transforming healthcare systems and improving care around the world.
+Judging criteria can be found in the table below.Health Systems Hackathon Participant Guide
+Health Systems Innovation Lab, Harvard University, 2026 © 14
+Judging rubric for Health Systems Innovation Hackathon
+Criterion Considerations Score
+1. Challenge
+- Is a clear need articulated?
+- Does the team demonstrate understanding of the root
+causes of the problem?
+- Is this a significant problem to address in terms of size,
+disease burden, consequences or perception?
+- Does the team provide a convincing rationale as to
+why this needs to be addressed urgently?
+/5
+2. Technology &
+Innovation
+- Offers new technology solution (better / faster /
+cheaper)
+- Provides convincing rationale for why this unique
+approach has the potential to work (if it doesn’t exist
+already in any other form)
+- If the solution is focused on low resource settings, it
+addresses relevant technical issues (e.g., low-cost
+components, power supply, limited internet)
+- Does the team clearly describe what the innovation is,
+its components and how it will address the challenge?
+- Does the innovation possess transformative potential
+to improve outcomes at the health systems level?
+- Does the team consider design and user experience in
+its innovation?
+/5
+3. Implementation
+- Beyond need, is there a demand for this solution?
+- Does the team address obstacles to implementation
+and outlines a plan to overcome them? (e.g., Logistics,
+supply chain, overstretched implementing
+organizations, cultural appropriateness, etc.)
+- Does the team outline a plan to develop the innovation
+and introduce it into the health system?
+- Is there a sustainable business model and value
+proposition?
+- Are critical stakeholders, the health system and the
+context adequately considered as part of the
+implementation strategy?
+/5
+4. Team - Is the team equipped with the right skill mix and
+attitude to implement the proposed innovation?
+/5
+5. Pitch
+- Does the team demonstrate the prototype or solution?
+- Does the team clearly articulate the challenge it is
+addressing and how their innovation is addressing it?
+- Does the team document next steps clearly – i.e. how
+they plan on working in the field to test their solution
+and how to continually incorporate end user feedback?
+- Are visual aids (presentation design and use of
+diagrams and figures) used effectively?
+/5
+6. Question &
+Answer
+- Is the team able to defend their position and respond to
+specific questions from the judges? /5
+7. Total
+/30Health Systems Hackathon Participant Guide
+Health Systems Innovation Lab, Harvard University, 2026 © 15
+What happens after the Hackathon?
+Winners from local hubs will advance to an intensive eight-week venture incubation program
+comprising two key stages: the Bootcamp and the Venture Building Immersion.
+• Selection Criteria:
+o Hubs with fewer than 50 participants will nominate 1 winning team.
+o Hubs with 50–100 participants will nominate 2 winning teams.
+o Hubs with more than 100 participants will nominate 3 winning teams.
+• Bootcamp Phase:
+The Bootcamp is divided into Bootcamp I and Bootcamp II, designed to refine
+pitches and strengthen the ventures’ innovative concepts. From the global pool of
+hackathon winners, a selective HSIL judging panel will invite 20 top teams to
+Bootcamp II for deeper mentorship and development. These teams will then present
+their solutions to an esteemed global judging panel.
+• Venture Building Immersion:
+The 10 most promising teams will advance to a four-week Venture Building
+Immersion featuring specialized seminars, interactive workshops, and one-on-one
+mentorship.
+• Demo Day:
+The program culminates in a Global Demo Day, where teams will pitch to investors,
+venture capital firms, and industry leaders for potential funding and partnerships.Health Systems Hackathon Participant Guide
+Health Systems Innovation Lab, Harvard University, 2026 © 16
+Resources & Data Sources on Top Killer Diseases
+Cardiovascular diseases and Diabetes
+1. State of Cardiovascular Disease in G20+Countries (Health Systems Innovation Lab
+Harvard): https://www.hsph.harvard.edu/health-systems-innovation-
+lab/2022/05/11/cvd-g20/
+2. Cardiovascular Disease & Diabetes Roadmaps (World Heart Federation):
+https://world-heart-federation.org/cvd-roadmaps/whf-global-roadmaps/cvd-diabetes/
+3. Diabetes Fact Sheet (WHO): https://www.who.int/news-room/fact-
+sheets/detail/diabetes
+4. Cardiovascular Disease Fact Sheet (WHO): https://www.who.int/news-room/fact-
+sheets/detail/cardiovascular-diseases-(cvds)
+5. “Diabetes a defining disease of the 21st Century” (Lancet Article):
+https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(23)01296-5/fulltext
+Cancer
+1. Global cancer burden growing, amidst mounting need for services
+https://www.who.int/news/item/01-02-2024-global-cancer-burden-growing--
+amidst-mounting-need-for-services
+2. International Agency for Research on Cancer https://www.iarc.who.int/Union for
+International Cancer Control https://www.uicc.org/
+Mental Health
+1. The Mental Health Atlas by the World Health Organization (WHO):
+https://www.who.int/publications/i/item/9789240036703
+2. A comprehensive study on the global burden of 12 mental disorders across 204
+countries and territories from 1990 to 2019:
+https://www.thelancet.com/journals/lanpsy/article/PIIS2215-0366(21)00395-3/fulltext
+3. Global suicide data provided by the World Health Organization (WHO):
+https://www.who.int/teams/mental-health-and-substance-use/data-research/suicide-
+data
+4. Access to the WHO MiNDbank online database, which contains a wealth of mental
+health data, policies, and strategies: https://extranet.who.int/mindbank/
+5. Visualization of the global burden of mental health diseases through the Global
+Burden of Disease Study: https://vizhub.healthdata.org/gbd-results/
+6. Mental health data available from the Institute for Health Metrics and Evaluation
+(IHME): https://www.healthdata.org/research-analysis/health-risks-issues/mental-
+health#:~:text=12%25%20of%20the%20world's%20population,to%20mental%20dis
+orders%20in%202019.
+Infectious Diseases
+The Global Health Data Exchange platform (IHME): https://ghdx.healthdata.orgBÁO CÁO CHUYÊN ĐỀ
+PHÂN TÍCH DỮ LIỆU MỞ, NGHIÊN CỨU LIÊN QUAN VÀ KHOẢNG TRỐNG NGHIÊN CỨU
+CHO Ý TƯỞNG CAREAI
+Hệ thống xác thực dữ liệu EHR dinh dưỡng nhi khoa nội trú bằng AI
+và chuẩn hóa HL7 FHIR
+
+Mục đích	Tổng hợp các bộ dữ liệu mở, bài báo tiêu biểu và khoảng trống nghiên cứu để phát triển ý tưởng CareAI thành một hướng nghiên cứu/hackathon có tính khoa học cao.
+Phạm vi	Tập trung vào EHR nhi khoa, dữ liệu nhân trắc học, NLP trên ghi chú lâm sàng, an toàn dữ liệu và khả năng liên thông theo HL7 FHIR.
+Thời điểm biên soạn	Tháng 3 năm 2026
+
+Thông điệp chính. Hiện chưa tồn tại một bộ dữ liệu công khai chuẩn cho đúng bài toán CareAI. Khoảng trống lớn nhất nằm ở chỗ chưa có benchmark mở nào kết hợp đồng thời dữ liệu nhân trắc học nhi khoa, ghi chú lâm sàng tự do, dữ liệu dinh dưỡng và nhãn lỗi logic. Vì vậy, hướng khả thi nhất là dùng dữ liệu synthetic/FHIR để dựng lớp xác thực, sau đó kiểm thử từng phần bằng các cơ sở dữ liệu công khai như PIC, MIMIC-IV và MIMIC-IV-Note.
+ 
+1. Tóm tắt điều hành
+Ý tưởng CareAI nhắm vào một vấn đề có giá trị khoa học và giá trị triển khai cao trong bệnh viện: dữ liệu nền của EHR nhi khoa, đặc biệt là cân nặng, chiều cao, chỉ số tăng trưởng và ghi chú lâm sàng liên quan đến phù, quá tải dịch hoặc ăn vào, thường không được xác thực theo ngữ cảnh trước khi được dùng để ra quyết định dinh dưỡng.
+Tài liệu tổng quan mới về chất lượng dữ liệu EHR cho thấy các chiều được đánh giá nhiều nhất vẫn là độ đầy đủ, tính đúng, tính hợp lý, tính phù hợp cấu trúc và tính cập nhật; tuy nhiên cộng đồng vẫn chưa có một chuẩn thống nhất cho đánh giá chất lượng dữ liệu EHR. Đây chính là cơ sở khoa học quan trọng để phát triển một validation layer tự động như CareAI.
+Các nghiên cứu hiện có đã chứng minh ba mảnh ghép riêng lẻ là khả thi: (i) làm sạch dữ liệu nhân trắc học trong EHR nhi khoa; (ii) tạo screen dinh dưỡng nhi khoa tự động từ anthropometrics; và (iii) dùng NLP trên ghi chú lâm sàng để phát hiện tín hiệu an toàn hoặc lỗi chẩn đoán. Tuy nhiên, khoảng trống nằm ở việc ghép ba mảnh này lại trong một khung thống nhất, chuyên cho dinh dưỡng nhi khoa nội trú và tương thích HL7 FHIR.
+Vì chưa có benchmark mở đúng domain, chiến lược hợp lý nhất là xây mô hình hai tầng: tầng rule-based để phát hiện lỗi cấu trúc/đơn vị/trajectory và tầng NLP-context để đối chiếu structured anthropometrics với free-text clinical notes; sau đó xuất record đã xác thực sang các tài nguyên FHIR như Observation, NutritionOrder và NutritionIntake.
+2. Dịch và diễn giải ý tưởng CareAI
+Bản dịch học thuật đề xuất:
+“Chăm sóc nội trú nhi khoa vẫn dễ bị ảnh hưởng bởi sự không đồng nhất trong ghi chép và các lỗi nhập liệu do con người trong hồ sơ bệnh án điện tử. Những sai sót như nhầm lẫn phù bệnh lý với tăng cân sinh lý có thể dẫn đến điều trị dinh dưỡng không hiệu quả, thậm chí nguy hiểm, trong bối cảnh khoa điều trị cần phản ứng nhanh. CareAI cung cấp một lớp xác thực dữ liệu ứng dụng AI theo thời gian thực, sử dụng xử lý ngôn ngữ tự nhiên để đối chiếu các chỉ số nhân trắc học với ghi chú lâm sàng nhằm phát hiện những bất hợp lý về logic. Khác với các công cụ EHR mang tính tổng quát, CareAI được hiệu chỉnh riêng theo các ngưỡng và đặc thù nhi khoa, đồng thời tự động chuyển đổi hồ sơ đã được xác thực sang định dạng chuẩn HL7 FHIR, giúp thu hẹp khoảng cách giữa dữ liệu bệnh viện phân mảnh và yêu cầu quản trị y tế công cộng.”
+Về bản chất, CareAI không phải là một hệ thống chẩn đoán bệnh. Nó là một hệ thống xác thực chất lượng dữ liệu lâm sàng có ngữ cảnh, với đích ra quyết định là an toàn dinh dưỡng, độ tin cậy của dữ liệu và khả năng liên thông chuẩn hóa.
+3. Bối cảnh khoa học và tính cấp thiết
+Trong nhi khoa, cân nặng là biến nền cho nhiều quyết định điều trị như định liều thuốc, bù dịch, truyền chế phẩm máu và hỗ trợ dinh dưỡng. Nếu cân nặng bị nhập sai, hệ thống kê đơn điện tử vẫn có thể tạo ra một quyết định sai nhưng hoàn toàn “chính xác về mặt tính toán”.
+Các nghiên cứu về lỗi nhập cân nặng ở trẻ em đã ghi nhận những lỗi điển hình như đảo đơn vị pound/kilogram, thêm hoặc mất chữ số, nhập nhầm biến số hoặc lỗi dấu thập phân. Các lỗi này có thể kéo theo sai số liều đáng kể.
+Trong môi trường ICU hoặc nội trú nặng, việc diễn giải cân nặng lại càng phức tạp vì tăng cân không luôn đồng nghĩa với cải thiện tình trạng dinh dưỡng. Phù và quá tải dịch có thể làm cân nặng tăng giả tạo; các tổng quan về fluid overload ở trẻ bệnh nặng cho thấy tình trạng này liên quan đến kết cục xấu hơn và làm khó việc diễn giải dữ liệu theo chiều hướng sinh lý thông thường.
+Song song với đó, các hướng dẫn và nghiên cứu về suy dinh dưỡng nhi khoa nội viện cho thấy việc nhận diện sớm nguy cơ dinh dưỡng có thể cải thiện phối hợp can thiệp; nhưng để làm được điều này, dữ liệu nền phải đủ sạch và đủ tin cậy.
+4. Các bộ dữ liệu công khai và mức độ phù hợp
+Bộ dữ liệu	Loại	Mức truy cập	Thành phần chính	Điểm mạnh cho CareAI	Hạn chế
+Synthea	Synthetic EHR	Mở hoàn toàn	Patient, Encounter, Observation, Procedure, Medication, FHIR Bundle	Tốt nhất để dựng prototype, cấy lỗi nhân trắc học, kiểm thử pipeline FHIR	Không phải dữ liệu lâm sàng thật; note text và đặc thù ICU/dinh dưỡng còn hạn chế
+Chatty-notes for Synthea	Synthetic notes	Mở hoàn toàn	Clinical notes sinh từ FHIR/Synthea	Cho phép mô phỏng bài toán structured data + free-text notes	Tính chân thực ngôn ngữ thấp hơn note bệnh viện thật
+PIC	Pediatric ICU	Credentialed access	ICU nhi khoa, structured EHR, xét nghiệm, điều trị, fluid-related variables	Rất sát bài toán nhi khoa nặng; hữu ích cho logic edema/fluid overload	Không phải bộ benchmark gán nhãn lỗi logic; truy cập có ràng buộc
+MIMIC-IV	Hospital/ICU EHR	Credentialed access	Structured data: measurements, orders, diagnoses, treatments	Rất mạnh để phát triển anomaly detection và hạ tầng dữ liệu	Chủ yếu người lớn; không chuyên cho dinh dưỡng nhi
+MIMIC-IV-Note	Clinical notes	Credentialed access	Discharge summaries, radiology reports, linkable với MIMIC-IV	Phù hợp để phát triển NLP trích tín hiệu từ note	Không phải pediatric nutrition domain
+eICU-CRD	Multi-center ICU	Credentialed access	Vital signs, diagnosis, treatment, care plan	Hữu ích cho bài toán tính tổng quát của thuật toán	Không nhi khoa chuyên biệt; thiếu note text theo mức kỳ vọng
+eICU Demo	Demo open subset	Mở cho đánh giá sơ bộ	Subset hơn 2.500 ICU stays	Dùng thử schema và pipeline nhanh	Quy mô nhỏ, không đủ cho nghiên cứu chính thức
+Nhận xét cốt lõi: nếu mục tiêu là một prototype hackathon có thể chạy được ngay và trình bày thuyết phục, Synthea kết hợp note giả lập là lựa chọn thực tiễn nhất. Nếu mục tiêu là nâng chất khoa học và kiểm thử độ hợp lý lâm sàng, PIC là bộ quan trọng nhất. MIMIC-IV và MIMIC-IV-Note phù hợp để xây mô-đun kỹ thuật tổng quát, nhưng không thay thế được domain pediatrics.
+5. Các bài báo và hướng nghiên cứu đã có
+Bài báo/Nguồn	Năm	Đóng góp chính	Ý nghĩa đối với CareAI
+Lewis et al., Electronic health record data quality assessment and tools: a systematic review	2023	Tổng quan hệ thống 103 bài; nhấn mạnh thiếu chuẩn thống nhất cho DQA EHR	Cung cấp nền lý thuyết để định vị CareAI như một DQA automation layer
+Phan et al., Automated data cleaning of paediatric anthropometric data...	2020	Đề xuất protocol làm sạch chiều cao/cân nặng theo longitudinal trajectories	Chứng minh anthropometric cleaning có giá trị nhưng vẫn thiên về outlier cleaning
+Lin et al., Cleaning of anthropometric data from PCORnet EHR using automated algorithms	2022	growthcleanr phát hiện duplicates, carried-forward values, unit-like errors	Gợi ý lớp rule-based đầu tiên cho CareAI
+Phillips et al., Implementation of an Automated Pediatric Malnutrition Screen...	2019	Tự động hóa screen suy dinh dưỡng nhi khoa từ anthropometrics trong EHR	Chứng minh structured anthropometrics có thể dùng cho cảnh báo dinh dưỡng
+Tabaie et al., Evaluation of a NLP approach to identify diagnostic errors	2024	Dùng NLP trên clinical notes để phát hiện tín hiệu diagnostic errors	Cho thấy note text có thể được dùng để phát hiện subtle safety signals
+Russ et al., Moving biosurveillance beyond coded data using AI for symptom detection from physician notes	2024	NLP trên ghi chú bác sĩ nhi khoa vượt ICD-10 trong phát hiện triệu chứng	Hỗ trợ tính khả thi của NLP trong dữ liệu note nhi khoa
+PIC database descriptor	2020	Mô tả cơ sở dữ liệu ICU nhi khoa công khai	Nguồn dữ liệu gần domain nhất để test tính hợp lý lâm sàng
+MIMIC-IV / MIMIC-IV-Note descriptors	2023	Mô tả structured EHR + free-text notes quy mô lớn	Nền tốt cho phát triển pipeline kỹ thuật trước khi tinh chỉnh sang pediatrics
+6. Research gap
+Khoảng trống 1 - Thiếu benchmark public đúng domain: Chưa có bộ dữ liệu mở nào đồng thời chứa anthropometrics nhi khoa, free-text notes, dữ liệu dinh dưỡng và nhãn lỗi logic/anomaly. Điều này làm cản trở việc so sánh mô hình và tái lập nghiên cứu.
+Khoảng trống 2 - Existing work chủ yếu là outlier cleaning: Các phương pháp hiện có mạnh ở phát hiện outlier, duplicate, carried-forward values, nhưng chưa kiểm tra được tính hợp lý theo ngữ cảnh lâm sàng. Ví dụ, hệ thống hiện chưa đủ tốt để phân biệt tăng cân do phù với tăng cân mang ý nghĩa dinh dưỡng.
+Khoảng trống 3 - NLP và anthropometrics vẫn tách rời: NLP trên notes đã được dùng cho diagnostic safety hoặc symptom detection; anthropometric algorithms lại đi theo một nhánh khác. Chưa có nhiều hệ thống hợp nhất structured weight/height data với clinical notes để phát hiện mâu thuẫn logic.
+Khoảng trống 4 - Thiếu FHIR-native validation framework: FHIR có resource phù hợp cho Observation, NutritionOrder và NutritionIntake, nhưng chưa có một pipeline validation chuyên cho dinh dưỡng nhi khoa nội trú, vừa giải thích được vừa có thể xuất record sạch theo chuẩn interoperable.
+Khoảng trống 5 - Thiếu external validation: Ngay cả các bài về data quality và diagnostic NLP cũng thường bị giới hạn ở một cơ sở dữ liệu hoặc một site, nên tính khái quát và tính portable qua các hệ thống EHR khác nhau vẫn còn yếu.
+7. Đề xuất khung phương pháp cho CareAI
+7.1. Tầng 1 - Kiểm tra cấu trúc và tính hợp lý nền
+•	Chuẩn hóa đơn vị (kg/lb, cm/m, UCUM), kiểm tra dấu thập phân, phát hiện dữ liệu trùng lặp, dữ liệu carried-forward và giá trị ngoài trajectory sinh lý.
+•	Thiết lập luật theo tuổi và theo ngữ cảnh khoa/phòng để tránh loại bỏ nhầm các trường hợp cực đoan nhưng có thật.
+•	Sinh điểm chất lượng dữ liệu ban đầu cho từng record và từng bệnh nhân.
+7.2. Tầng 2 - Đối chiếu ngữ cảnh bằng NLP
+•	Trích xuất tín hiệu từ clinical notes: edema, fluid overload, poor intake, feeding intolerance, diuresis, restriction, enteral feed, supplement, NPO, vomiting, diarrhea...
+•	Liên kết tín hiệu note với weight trajectory, fluid balance, medication orders, diuretics, enteral/oral nutrition orders.
+•	Phát hiện mâu thuẫn logic, ví dụ cân nặng tăng nhanh nhưng notes mô tả phù/quá tải dịch; hoặc cân nặng không đổi nhưng intake rất thấp kéo dài.
+7.3. Tầng 3 - Chuẩn hóa và xuất HL7 FHIR
+•	Observation cho cân nặng, chiều cao, BMI, weight-for-height, weight-for-age hoặc các chỉ số tăng trưởng liên quan.
+•	NutritionOrder cho chỉ định chế độ ăn, supplement, enteral formula hoặc infant formula.
+•	NutritionIntake cho dữ liệu ăn vào/tiêu thụ thực tế khi có nguồn phù hợp.
+•	Sinh audit log giải thích vì sao record bị gắn cờ, nhằm hỗ trợ review lâm sàng và cải tiến chất lượng dữ liệu.
+8. Chiến lược đánh giá và xác thực
+Giai đoạn 1 - Synthetic benchmark. Dùng Synthea để sinh cohort bệnh nhi giả lập, sau đó cấy có kiểm soát các lỗi như sai đơn vị, sai dấu thập phân, duplicate, carried-forward, mâu thuẫn note - structured data. Đây là giai đoạn tốt nhất để đo precision/recall/F1 cho từng loại lỗi.
+Giai đoạn 2 - Kiểm thử trên dữ liệu công khai credentialed. Dùng PIC để xem mô hình có phản ứng hợp lý với bối cảnh ICU nhi khoa thật hay không; dùng MIMIC-IV/MIMIC-IV-Note để kiểm tra tính ổn định của pipeline NLP và anomaly detection trên dữ liệu quy mô lớn.
+Giai đoạn 3 - Prospective pilot. Khi có đối tác bệnh viện, thực hiện study có thẩm định đạo đức để đo tỷ lệ cờ đúng theo đánh giá chuyên gia, thời gian tiết kiệm khi rà soát hồ sơ và tác động tiềm năng đến quyết định can thiệp dinh dưỡng.
+Nhóm chỉ số	Chỉ số gợi ý	Diễn giải
+Phát hiện lỗi	Precision, Recall, F1	Đo khả năng phát hiện đúng các lỗi đã cấy hoặc đã được chuyên gia gắn nhãn.
+Xếp hạng nguy cơ	AUROC, AUPRC	Dùng khi mô hình sinh điểm nguy cơ lỗi hoặc độ tin cậy dữ liệu.
+Giải thích	Rate of actionable flags	Tỷ lệ cờ bất thường mà chuyên gia thấy là có ích và có thể hành động.
+Khả năng dùng thật	Review time saved, alert burden	Đo giảm gánh nặng rà soát thủ công nhưng không làm tăng alert fatigue.
+9. Cân nhắc đạo đức, pháp lý và triển khai
+•	CareAI nên được định vị là hệ thống xác thực dữ liệu và hỗ trợ rà soát, không phải hệ thống chẩn đoán tự động.
+•	Dữ liệu nhi khoa có yêu cầu bảo mật cao; nếu dùng dữ liệu thật phải có DUA/IRB thích hợp, giới hạn truy cập, lưu vết và nguyên tắc tối thiểu hóa dữ liệu.
+•	Mô hình NLP dễ bị ảnh hưởng bởi khác biệt văn phong giữa các bệnh viện; cần kế hoạch domain adaptation hoặc bộ từ khóa cốt lõi có thể tùy biến.
+•	Cảnh báo quá nhiều có thể gây mệt mỏi cho người dùng; vì vậy hệ thống nên ưu tiên sinh cờ giải thích được và có mức độ ưu tiên rõ ràng.
+10. Kết luận và khuyến nghị
+Kết luận quan trọng nhất là: CareAI là một ý tưởng mạnh về mặt khoa học vì chạm đúng giao điểm giữa data quality, patient safety, pediatric nutrition, clinical NLP và interoperability. Tuy nhiên, tính mới thật sự không nằm ở việc dùng AI trong bệnh viện nói chung, mà nằm ở việc xây một lớp xác thực dữ liệu có ngữ cảnh chuyên cho nhi khoa nội trú.
+Trong giai đoạn hackathon hoặc giai đoạn nghiên cứu khởi đầu, phương án thực dụng và thuyết phục nhất là xây một prototype gồm: (i) synthetic pediatric FHIR data; (ii) module phát hiện lỗi nhân trắc học; (iii) module NLP đối chiếu với note text; và (iv) chức năng xuất record sạch sang FHIR.
+Khuyến nghị triển khai theo thứ tự ưu tiên:
+•	P1 - Xây bộ taxonomy lỗi dữ liệu cho CareAI: unit error, decimal error, duplicate, carried-forward, implausible trajectory, context contradiction.
+•	P2 - Dùng Synthea + Chatty-notes để tạo benchmark giả lập có gắn nhãn lỗi.
+•	P3 - Dùng PIC để kiểm tra logic lâm sàng trong bối cảnh ICU nhi khoa.
+•	P4 - Chuẩn hóa đầu ra theo Observation, NutritionOrder, NutritionIntake để tăng sức nặng hệ thống và tính tương thích sản phẩm.
+•	P5 - Chuẩn bị protocol pilot có chuyên gia dinh dưỡng nhi khoa đồng đánh giá để tiến tới một nghiên cứu công bố được.
+11. Tài liệu tham khảo chọn lọc
+1. Lewis A.E., Weiskopf N., Abrams Z.B., et al. Electronic health record data quality assessment and tools: a systematic review. Journal of the American Medical Informatics Association. 2023;30(10):1730-1740.
+2. Penev Y.P., Buchanan T.R., Ruppert M.M., et al. Electronic Health Record Data Quality and Performance Assessments: Scoping Review. JMIR Medical Informatics. 2024;12:e58130.
+3. Phan H.T.T., Borca F., Cable D., et al. Automated data cleaning of paediatric anthropometric data from longitudinal electronic health records: protocol and application to a large patient cohort. Scientific Reports. 2020;10:10164.
+4. Lin P.-I.D., Rifas-Shiman S.L., Aris I.M., et al. Cleaning of anthropometric data from PCORnet electronic health records using automated algorithms. JAMIA Open. 2022;5(4):ooac089.
+5. Phillips C.A., Bailer J., Foster E., et al. Implementation of an Automated Pediatric Malnutrition Screen Using Anthropometric Measurements in the Electronic Health Record. Journal of the Academy of Nutrition and Dietetics. 2019;119(8):1243-1249.
+6. Johnson A.E.W., Bulgarelli L., Shen L., et al. MIMIC-IV, a freely accessible electronic health record dataset. Scientific Data. 2023;10:1.
+7. Johnson A., Pollard T., Horng S., Celi L.A., Mark R. MIMIC-IV-Note: Deidentified free-text clinical notes. PhysioNet. 2023.
+8. Zeng X., Yu G., Lu Y., et al. PIC, a paediatric-specific intensive care database. Scientific Data. 2020;7:14.
+9. Pollard T.J., Johnson A.E.W., Raffa J.D., et al. eICU Collaborative Research Database. PhysioNet. 2019.
+10. Russ C., et al. Moving Biosurveillance Beyond Coded Data Using AI for Symptom Detection From Physician Notes: Retrospective Cohort Study. Journal of Medical Internet Research. 2024;26:e53367.
+11. Tabaie M., et al. Evaluation of a Natural Language Processing Approach to Identify Diagnostic Errors and Analysis of Safety Learning System Case Review Data. Journal of Medical Internet Research. 2024;26:e50935.
+12. HL7 International. FHIR NutritionOrder Resource; FHIR NutritionIntake Resource; US Core Pediatric Weight for Height Observation Profile. Truy cập 2026.
+13. SyntheticMass / Synthea project documentation and GitHub repository. Truy cập 2026.
+14. Bourdeaux C.P., et al. Association Between Fluid Balance and Outcomes in Critically Ill Children: A Systematic Review and Meta-analysis. JAMA Pediatrics. 2018.
+15. Hughes H.K., et al. Assessing Frequency and Risk of Weight Entry Errors in Pediatrics. JAMA Pediatrics. 2017.
