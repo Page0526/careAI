@@ -1,7 +1,6 @@
 /**
  * AI Agent: Groq API Client
  */
-const fetch = require('node-fetch');
 const config = require('../config');
 
 async function callGroq(messages, options = {}) {

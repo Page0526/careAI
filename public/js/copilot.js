@@ -116,9 +116,9 @@ const Copilot = (() => {
     container.scrollTop = container.scrollHeight;
 
     try {
-      let url = '/api/agent/ask';
-      const body = { question: msg };
-      if (currentPatientId) body.patientId = parseInt(currentPatientId);
+      let url = '/api/agent/chat';
+      const body = { message: msg };
+      if (currentPatientId) body.patient_id = parseInt(currentPatientId);
 
       const res = await fetch(url, {
         method: 'POST',
@@ -170,13 +170,13 @@ const Copilot = (() => {
     if (!container) return;
     container.innerHTML = '<div class="skeleton" style="height:80px;"></div>';
     try {
-      const res = await fetch(`/api/agent/ask`, {
+      const res = await fetch(`/api/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ patientId: parseInt(patientId), question: 'Tạo tóm tắt ngắn gọn về tình trạng dinh dưỡng và các cảnh báo quan trọng của bệnh nhân này bằng tiếng Việt, tối đa 3 câu.' })
+        body: JSON.stringify({ patient_id: parseInt(patientId), message: 'Tạo tóm tắt ngắn gọn về tình trạng dinh dưỡng và các cảnh báo quan trọng của bệnh nhân này bằng tiếng Việt, tối đa 3 câu.' })
       });
       const data = await res.json();
-      const summary = data.answer || data.response || 'Không thể tạo tóm tắt AI. Vui lòng thử lại.';
+      const summary = data.response || data.answer || 'Không thể tạo tóm tắt AI. Vui lòng thử lại.';
       container.innerHTML = getAISummaryHTML(summary);
       if (typeof injectIcons === 'function') injectIcons();
     } catch (e) {
