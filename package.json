@@ -2,11 +2,19 @@
   "name": "careai",
   "version": "1.0.0",
   "description": "CareAI - AI-powered EHR Data Validation for Pediatric Inpatient Nutrition",
+  "private": true,
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js",
-    "seed": "node backend/data/seed.js"
+    "dev": "node --watch server.js",
+    "seed": "node backend/data/seed.js",
+    "lint": "eslint server.js backend public/js scripts",
+    "lint:fix": "eslint server.js backend public/js scripts --fix",
+    "smoke": "node scripts/smoke-check.js",
+    "check": "yarn lint && yarn smoke"
+  },
+  "engines": {
+    "node": ">=20"
   },
   "dependencies": {
     "better-sqlite3": "^11.0.0",
@@ -15,5 +23,10 @@
     "express": "^4.21.0",
     "node-fetch": "^2.7.0",
     "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.1.0",
+    "globals": "^17.4.0"
   }
 }

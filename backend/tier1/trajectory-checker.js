@@ -7,7 +7,7 @@
  * R010: BMI extreme outlier
  */
 const config = require('../config');
-const { weightForAgeZScore, heightForAgeZScore, bmiZScore, ageInMonths } = require('./zscore');
+const { weightForAgeZScore, heightForAgeZScore, ageInMonths } = require('./zscore');
 
 function checkTrajectory(observation, patient, history) {
   const alerts = [];

@@ -3,20 +3,47 @@
  */
 const API_BASE = '/api';
 
+async function readResponseData(response) {
+  const contentType = response.headers.get('content-type') || '';
+
+  if (contentType.includes('application/json')) {
+    return response.json();
+  }
+
+  return response.text();
+}
+
+function createApiError(response, payload) {
+  const message = typeof payload === 'object' && payload !== null
+    ? payload.error || payload.message || `HTTP ${response.status}: ${response.statusText}`
+    : `HTTP ${response.status}: ${response.statusText}`;
+  const error = new Error(message);
+  error.status = response.status;
+  error.payload = payload;
+  return error;
+}
+
+async function apiRequest(path, options = {}) {
+  const response = await fetch(`${API_BASE}${path}`, options);
+  const payload = await readResponseData(response);
+
+  if (!response.ok) {
+    throw createApiError(response, payload);
+  }
+
+  return payload;
+}
+
 async function apiGet(path) {
-  const res = await fetch(`${API_BASE}${path}`);
-  if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-  return res.json();
+  return apiRequest(path);
 }
 
 async function apiPost(path, body) {
-  const res = await fetch(`${API_BASE}${path}`, {
+  return apiRequest(path, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
   });
-  if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-  return res.json();
 }
 
 function severityIcon(severity) {
@@ -52,7 +79,7 @@ function renderMarkdown(text) {
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
     .replace(/`(.+?)`/g, '<code style="background:var(--bg-primary);padding:2px 6px;border-radius:4px;font-family:var(--font-mono);font-size:0.85em;">$1</code>')
-    .replace(/^[•\-] (.+)$/gm, '<li>$1</li>')
+    .replace(/^[-•] (.+)$/gm, '<li>$1</li>')
     .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
     .replace(/\n\n/g, '<br><br>')
     .replace(/\n/g, '<br>')

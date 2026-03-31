@@ -121,6 +121,88 @@ function setupTabs() {
   });
 }
 
+function calculateRiskLevelFromAlerts(alerts) {
+  const activeAlerts = alerts.filter(alert => !alert.resolved);
+  const criticalCount = activeAlerts.filter(alert => alert.severity === 'critical').length;
+  const highCount = activeAlerts.filter(alert => alert.severity === 'high').length;
+  const warningCount = activeAlerts.filter(alert => alert.severity === 'warning').length;
+
+  if (criticalCount > 0 || highCount > 2) return 'critical';
+  if (highCount > 0) return 'high';
+  if (warningCount > 0) return 'moderate';
+  return 'low';
+}
+
+function buildAlertKey(alert) {
+  return [
+    alert.tier || '',
+    alert.alert_type || '',
+    alert.observation_id || '',
+    alert.message || ''
+  ].join('::');
+}
+
+function dedupeAlerts(alerts) {
+  const seen = new Set();
+
+  return alerts.filter(alert => {
+    const key = buildAlertKey(alert);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function applyValidationResult(validationData) {
+  if (!patientData) return;
+
+  const tier1Observations = validationData?.tier1?.observations || [];
+  const tier2Alerts = validationData?.tier2?.alerts || [];
+  const validationByObservationId = new Map(
+    tier1Observations.map(result => [result.observation_id, result])
+  );
+
+  patientData.observations = (patientData.observations || []).map(observation => {
+    const validationResult = validationByObservationId.get(observation.id);
+    if (!validationResult) return observation;
+
+    return {
+      ...observation,
+      data_quality_score: validationResult.data_quality_score,
+      zscore: validationResult.zscore ? validationResult.zscore.zscore : observation.zscore,
+      zscore_interpretation: validationResult.zscore
+        ? validationResult.zscore.interpretation
+        : observation.zscore_interpretation,
+    };
+  });
+
+  const preservedAlerts = (patientData.alerts || []).filter(alert => {
+    const alertType = String(alert.alert_type || '');
+    return alertType.startsWith('LAB_') || !['tier1', 'tier2'].includes(alert.tier);
+  });
+
+  const recalculatedAlerts = [
+    ...tier1Observations.flatMap(result => result.alerts || []),
+    ...tier2Alerts,
+  ];
+
+  patientData.alerts = dedupeAlerts([...preservedAlerts, ...recalculatedAlerts]);
+
+  const activeAlerts = patientData.alerts.filter(alert => !alert.resolved);
+  patientData.patient = {
+    ...patientData.patient,
+    risk_level: calculateRiskLevelFromAlerts(patientData.alerts),
+  };
+  patientData.summary = {
+    ...(patientData.summary || {}),
+    total_observations: (patientData.observations || []).length,
+    total_notes: (patientData.notes || []).length,
+    active_alerts: activeAlerts.length,
+    critical_alerts: activeAlerts.filter(alert => alert.severity === 'critical').length,
+    avg_dq_score: validationData?.combined_summary?.average_data_quality ?? patientData.summary?.avg_dq_score,
+  };
+}
+
 function renderGrowthChart(data) {
   const obs = data.observations || [];
   const weights = obs.filter(o => o.type === 'weight').sort((a, b) => new Date(a.effective_date) - new Date(b.effective_date));
@@ -268,18 +350,12 @@ async function renderFHIR(patientId) {
   const viewer = document.getElementById('fhir-viewer');
   if (!viewer) return;
   try {
-    const data = await apiGet(`/patients/${patientId}/fhir`);
-    viewer.innerHTML = highlightJSON(JSON.stringify(data, null, 2));
+    const data = await apiGet(`/fhir/${patientId}`);
+    viewer.innerHTML = highlightJSON(data);
     // Download button
     const btn = document.getElementById('btn-download-json');
     if (btn) {
-      btn.onclick = () => {
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `patient_${patientId}_fhir.json`;
-        a.click();
-      };
+      btn.onclick = () => { window.location.href = `/api/fhir/${patientId}/download`; };
     }
   } catch (e) {
     viewer.textContent = 'FHIR data not available for this patient.';
@@ -294,13 +370,20 @@ function setupRevalidate(id) {
       const labelEl = btn.querySelector('span:last-child');
       if (labelEl) labelEl.textContent = I18N.t('common.loading', 'Đang tải...');
       try {
-        await apiPost(`/validation/patient/${id}`);
-        patientData = await apiGet(`/patients/${id}`);
+        const validationData = await apiGet(`/validation/${id}`);
+        applyValidationResult(validationData);
+        renderBanner(patientData);
         renderNutritionSummary(patientData);
         renderAlerts(patientData);
         renderGrowthChart(patientData);
+        if (typeof Layout !== 'undefined') {
+          Layout.showToast(I18N.t('patient.revalidate', 'Kiểm tra lại') + ' thành công', 'info', 2400);
+        }
       } catch (e) {
         console.error('Revalidation failed:', e);
+        if (typeof Layout !== 'undefined') {
+          Layout.showToast(e.message || 'Không thể kiểm tra lại dữ liệu', 'error', 3200);
+        }
       }
       btn.disabled = false;
       if (labelEl) labelEl.textContent = I18N.t('patient.revalidate', 'Kiểm tra lại');

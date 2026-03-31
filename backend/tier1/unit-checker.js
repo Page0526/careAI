@@ -11,13 +11,11 @@ function checkUnitConfusion(observation, patient) {
   if (observation.type === 'weight') {
     // R001: Check if value makes more sense in pounds
     const valueAsKg = observation.value;
-    const valueIfConvertedFromLb = valueAsKg * config.LB_TO_KG;
 
     // If the kg value seems too high for age, maybe it's actually in pounds
     if (observation.unit === 'kg') {
       // A weight in pounds entered as kg would be ~2.2x too high
       const expectedMax = getExpectedWeightRange(patient).max;
-      const expectedMin = getExpectedWeightRange(patient).min;
 
       if (valueAsKg > expectedMax * 1.8 && valueAsKg * config.LB_TO_KG <= expectedMax) {
         alerts.push({

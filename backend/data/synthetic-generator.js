@@ -3,13 +3,10 @@
  * Generates 28 pediatric patients across 8 clinical scenarios
  * with Vietnamese names and realistic anthropometric data
  */
-const { weightForAgeZScore, heightForAgeZScore, ageInMonths } = require('../tier1/zscore');
-
 // Vietnamese names
 const FIRST_NAMES_MALE = ['Minh', 'Đức', 'Hùng', 'Anh', 'Khoa', 'Long', 'Phúc', 'Bảo', 'Quang', 'Nam', 'Thịnh', 'Tuấn', 'Vinh', 'Dũng'];
 const FIRST_NAMES_FEMALE = ['Linh', 'Mai', 'Hương', 'Ngọc', 'Trang', 'Thảo', 'Hà', 'Lan', 'Yến', 'Chi', 'Thủy', 'Phương', 'Oanh', 'Hạnh'];
 const LAST_NAMES = ['Nguyễn', 'Trần', 'Lê', 'Phạm', 'Hoàng', 'Huỳnh', 'Phan', 'Vũ', 'Võ', 'Đặng', 'Bùi', 'Đỗ', 'Hồ', 'Ngô'];
-const MIDDLE_NAMES = ['Văn', 'Thị', 'Minh', 'Thanh', 'Hoàng', 'Xuân', 'Kim', 'Quốc'];
 
 const WARDS = ['PICU', 'Nhi Tổng hợp', 'Nhi Tiêu hóa', 'Nhi Dinh dưỡng', 'Sơ sinh'];
 const DIAGNOSES = [

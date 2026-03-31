@@ -120,15 +120,15 @@ const Layout = (() => {
         const q = input.value.trim();
         if (q.length < 2) { dropdown.style.display = 'none'; return; }
         try {
-          const res = await fetch(`/api/patients?search=${encodeURIComponent(q)}`);
-          const patients = await res.json();
+          const data = await apiGet(`/patients?search=${encodeURIComponent(q)}`);
+          const patients = Array.isArray(data.patients) ? data.patients : [];
           if (patients.length === 0) {
             dropdown.innerHTML = '<div class="search-item empty">Không tìm thấy</div>';
           } else {
             dropdown.innerHTML = patients.slice(0, 6).map(p => `
               <div class="search-item" onclick="window.location.href='patient-detail.html?id=${p.id}'">
                 <strong>${p.name}</strong>
-                <span class="search-meta">${p.mrn || ''} · ${p.department || ''}</span>
+                <span class="search-meta">${p.medical_record_number || ''} · ${p.ward || ''}</span>
               </div>
             `).join('');
           }

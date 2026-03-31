@@ -58,7 +58,7 @@ function seed() {
         zscore = result.zscore;
         interpretation = result.interpretation;
       }
-    } catch (e) { /* skip z-score on error */ }
+    } catch { /* skip z-score on error */ }
 
     insertObs.run(patientId, obs.type, obs.value, obs.unit, obs.effective_date, obs.source, zscore, interpretation, 1.0);
     obsCount++;

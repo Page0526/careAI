@@ -46,7 +46,6 @@ function detectContradictions(observation, patient, notes) {
     // C001: Weight gain + edema signals → expected, lower severity
     // C002: Weight gain + NO edema but edema-like gain → flag for clinical review
     const hasEdema = allSignals.some(s => s.category === 'edema');
-    const hasDehydration = allSignals.some(s => s.category === 'dehydration');
     const hasPoorIntake = allSignals.some(s => s.category === 'poor_intake');
     const hasVomiting = allSignals.some(s => s.category === 'vomiting');
     const hasDiuretics = allSignals.some(s => s.category === 'diuretics');

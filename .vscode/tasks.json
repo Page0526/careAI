@@ -1,0 +1,56 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "CareAI: Start",
+            "type": "shell",
+            "command": "yarn",
+            "args": [
+                "start"
+            ],
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "CareAI: Dev",
+            "type": "shell",
+            "command": "yarn",
+            "args": [
+                "dev"
+            ],
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "label": "CareAI: Seed",
+            "type": "shell",
+            "command": "yarn",
+            "args": [
+                "seed"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "CareAI: Lint",
+            "type": "shell",
+            "command": "yarn",
+            "args": [
+                "lint"
+            ],
+            "group": "test",
+            "problemMatcher": [
+                "$eslint-stylish"
+            ]
+        },
+        {
+            "label": "CareAI: Smoke",
+            "type": "shell",
+            "command": "yarn",
+            "args": [
+                "smoke"
+            ],
+            "group": "test",
+            "problemMatcher": []
+        }
+    ]
+}

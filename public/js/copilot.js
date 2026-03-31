@@ -116,16 +116,10 @@ const Copilot = (() => {
     container.scrollTop = container.scrollHeight;
 
     try {
-      let url = '/api/agent/chat';
       const body = { message: msg };
       if (currentPatientId) body.patient_id = parseInt(currentPatientId);
 
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      });
-      const data = await res.json();
+      const data = await apiPost('/agent/chat', body);
       const thinking = document.getElementById('copilot-thinking');
       if (thinking) thinking.remove();
 
@@ -139,6 +133,7 @@ const Copilot = (() => {
   }
 
   function formatMarkdown(text) {
+    text = String(text || '');
     // Strip all emoji
     text = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{27BF}\u{FE00}-\u{FE0F}\u{1F900}-\u{1F9FF}\u{2B50}\u{2702}-\u{27B0}\u{23E9}-\u{23FA}\u{200D}\u{20E3}\u{FE0E}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2194}-\u{21AA}\u{231A}\u{231B}\u{25AA}\u{25AB}\u{25B6}\u{25C0}\u{25FB}-\u{25FE}\u{2614}\u{2615}\u{2648}-\u{2653}\u{267F}\u{2693}\u{26A1}\u{26AA}\u{26AB}\u{26BD}\u{26BE}\u{26C4}\u{26C5}\u{26CE}\u{26D4}\u{26EA}\u{26F2}\u{26F3}\u{26F5}\u{26FA}\u{26FD}\u{2934}\u{2935}\u{2B05}-\u{2B07}\u{2B1B}\u{2B1C}\u{2B55}\u{3030}\u{303D}\u{3297}\u{3299}\u{1F004}\u{1F0CF}\u{1F170}-\u{1F171}\u{1F17E}\u{1F17F}\u{1F18E}\u{1F191}-\u{1F19A}\u{1F201}\u{1F202}\u{1F21A}\u{1F22F}\u{1F232}-\u{1F23A}\u{1F250}\u{1F251}]/gu, '');
     // Clean up multiple spaces from emoji removal
@@ -184,12 +179,10 @@ const Copilot = (() => {
     if (!container) return;
     container.innerHTML = '<div class="skeleton" style="height:80px;"></div>';
     try {
-      const res = await fetch(`/api/agent/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ patient_id: parseInt(patientId), message: 'Tạo tóm tắt ngắn gọn về tình trạng dinh dưỡng và các cảnh báo quan trọng của bệnh nhân này bằng tiếng Việt, tối đa 3 câu.' })
+      const data = await apiPost('/agent/chat', {
+        patient_id: parseInt(patientId),
+        message: 'Tạo tóm tắt ngắn gọn về tình trạng dinh dưỡng và các cảnh báo quan trọng của bệnh nhân này bằng tiếng Việt, tối đa 3 câu.'
       });
-      const data = await res.json();
       const summary = data.response || data.answer || 'Không thể tạo tóm tắt AI. Vui lòng thử lại.';
       container.innerHTML = getAISummaryHTML(summary);
       if (typeof injectIcons === 'function') injectIcons();
