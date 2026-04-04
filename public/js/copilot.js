@@ -1,8 +1,4 @@
-/* ═══════════════════════════════════════════
-   CareAI Copilot – Floating AI Assistant
-   Context-aware, slide-in panel
-   ═══════════════════════════════════════════ */
-
+﻿
 const Copilot = (() => {
   let isOpen = false;
   let currentPatientId = null;
@@ -69,6 +65,7 @@ const Copilot = (() => {
     const fab = document.getElementById('copilot-fab');
     panel.classList.add('open');
     fab.classList.add('active');
+    fab.style.display = 'none';
     isOpen = true;
     document.getElementById('copilot-input').focus();
   }
@@ -78,6 +75,7 @@ const Copilot = (() => {
     const fab = document.getElementById('copilot-fab');
     panel.classList.remove('open');
     fab.classList.remove('active');
+    fab.style.display = 'flex';
     isOpen = false;
   }
 
@@ -200,3 +198,6 @@ const Copilot = (() => {
 
   return { init, open, close, toggle, setPatientContext, addMessage, loadAISummary, refreshSummary, getAISummaryHTML };
 })();
+
+
+

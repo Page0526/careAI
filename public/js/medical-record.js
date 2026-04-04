@@ -9,37 +9,37 @@ const DRAFT_KEY = 'careai_medical_record_draft';
 // Lab reference ranges (client-side mirror for real-time validation)
 const LAB_REFS = {
   biochemistry: [
-    { key: 'ure_mau',       name: 'Urê máu',           min: 2.5,  max: 7.5,  unit: 'mmol/L' },
-    { key: 'creatinin_mau', name: 'Creatinin máu',      min: 27,   max: 62,   unit: 'µmol/L' },
-    { key: 'ast_got',       name: 'AST (GOT)',           min: 0,    max: 37,   unit: 'U/L' },
-    { key: 'alt_gpt',       name: 'ALT (GPT)',           min: 0,    max: 40,   unit: 'U/L' },
-    { key: 'sat_mau',       name: 'Sắt máu',            min: 13,   max: 33,   unit: 'µmol/L' },
-    { key: 'albumin_mau',   name: 'Albumin máu',         min: 35,   max: 52,   unit: 'g/L' },
-    { key: 'mg_mau',        name: 'Mg máu',              min: 0.7,  max: 1.1,  unit: 'mmol/L' },
-    { key: 'calci_ion',     name: 'Calci ion hóa',       min: 1.17, max: 1.29, unit: 'mmol/L' },
-    { key: 'natri',         name: 'Na (Natri)',           min: 135,  max: 145,  unit: 'mmol/L' },
-    { key: 'kali',          name: 'K (Kali)',             min: 3.5,  max: 5.0,  unit: 'mmol/L' },
-    { key: 'chloride',      name: 'Cl (Chloride)',        min: 98,   max: 106,  unit: 'mmol/L' },
-    { key: 'c3',            name: 'Bổ thể C3',           min: 90,   max: 180,  unit: 'mg/dl' },
-    { key: 'c4',            name: 'Bổ thể C4',           min: 10,   max: 40,   unit: 'mg/dl' },
-    { key: 'ferritin',      name: 'Ferritin',             min: 12,   max: 150,  unit: 'ng/mL' },
+    { key: 'ure_mau', name: 'Urê máu', min: 2.5, max: 7.5, unit: 'mmol/L' },
+    { key: 'creatinin_mau', name: 'Creatinin máu', min: 27, max: 62, unit: 'µmol/L' },
+    { key: 'ast_got', name: 'AST (GOT)', min: 0, max: 37, unit: 'U/L' },
+    { key: 'alt_gpt', name: 'ALT (GPT)', min: 0, max: 40, unit: 'U/L' },
+    { key: 'sat_mau', name: 'Sắt máu', min: 13, max: 33, unit: 'µmol/L' },
+    { key: 'albumin_mau', name: 'Albumin máu', min: 35, max: 52, unit: 'g/L' },
+    { key: 'mg_mau', name: 'Mg máu', min: 0.7, max: 1.1, unit: 'mmol/L' },
+    { key: 'calci_ion', name: 'Calci ion hóa', min: 1.17, max: 1.29, unit: 'mmol/L' },
+    { key: 'natri', name: 'Na (Natri)', min: 135, max: 145, unit: 'mmol/L' },
+    { key: 'kali', name: 'K (Kali)', min: 3.5, max: 5.0, unit: 'mmol/L' },
+    { key: 'chloride', name: 'Cl (Chloride)', min: 98, max: 106, unit: 'mmol/L' },
+    { key: 'c3', name: 'Bổ thể C3', min: 90, max: 180, unit: 'mg/dl' },
+    { key: 'c4', name: 'Bổ thể C4', min: 10, max: 40, unit: 'mg/dl' },
+    { key: 'ferritin', name: 'Ferritin', min: 12, max: 150, unit: 'ng/mL' },
   ],
   urinalysis: [
-    { key: 'sg',            name: 'Tỷ trọng (SG)',       min: 1.015, max: 1.025, unit: '' },
-    { key: 'ph_nieu',       name: 'pH nước tiểu',        min: 4.8,   max: 7.4,   unit: '' },
-    { key: 'protein_nieu',  name: 'Protein niệu',        min: 0,     max: 0.1,   unit: 'g/L' },
-    { key: 'glucose_nieu',  name: 'Glucose niệu',        min: 0,     max: 0.84,  unit: 'mmol/L' },
-    { key: 'blood_nieu',    name: 'Blood niệu',           min: 0,     max: 5,     unit: 'RBC/uL' },
-    { key: 'leukocytes',    name: 'Bạch cầu niệu',      min: 0,     max: 10,    unit: 'WBC/uL' },
-    { key: 'creatinin_nieu_24h', name: 'Creatinin niệu', min: null,  max: null,  unit: 'µmol/L' },
+    { key: 'sg', name: 'Tỷ trọng (SG)', min: 1.015, max: 1.025, unit: '' },
+    { key: 'ph_nieu', name: 'pH nước tiểu', min: 4.8, max: 7.4, unit: '' },
+    { key: 'protein_nieu', name: 'Protein niệu', min: 0, max: 0.1, unit: 'g/L' },
+    { key: 'glucose_nieu', name: 'Glucose niệu', min: 0, max: 0.84, unit: 'mmol/L' },
+    { key: 'blood_nieu', name: 'Blood niệu', min: 0, max: 5, unit: 'RBC/uL' },
+    { key: 'leukocytes', name: 'Bạch cầu niệu', min: 0, max: 10, unit: 'WBC/uL' },
+    { key: 'creatinin_nieu_24h', name: 'Creatinin niệu', min: null, max: null, unit: 'µmol/L' },
   ],
   coagulation: [
-    { key: 'fibrinogen',    name: 'Fibrinogen',           min: 2,    max: 4,    unit: 'g/L' },
-    { key: 'pt_giay',       name: 'PT (giây)',            min: 0,    max: 13.9, unit: 'giây' },
-    { key: 'pt_phan_tram',  name: 'PT (%)',               min: 70,   max: 140,  unit: '%' },
-    { key: 'inr',           name: 'INR',                   min: 0.9,  max: 1.3,  unit: '' },
-    { key: 'aptt_giay',     name: 'APTT (giây)',          min: 24,   max: 39,   unit: 'giây' },
-    { key: 'aptt_benh_chung', name: 'APTT Bệnh/Chứng',  min: 0.8,  max: 1.3,  unit: '' },
+    { key: 'fibrinogen', name: 'Fibrinogen', min: 2, max: 4, unit: 'g/L' },
+    { key: 'pt_giay', name: 'PT (giây)', min: 0, max: 13.9, unit: 'giây' },
+    { key: 'pt_phan_tram', name: 'PT (%)', min: 70, max: 140, unit: '%' },
+    { key: 'inr', name: 'INR', min: 0.9, max: 1.3, unit: '' },
+    { key: 'aptt_giay', name: 'APTT (giây)', min: 24, max: 39, unit: 'giây' },
+    { key: 'aptt_benh_chung', name: 'APTT Bệnh/Chứng', min: 0.8, max: 1.3, unit: '' },
   ]
 };
 
@@ -383,12 +383,16 @@ function validateWeight() {
     msgs.push({ level: 'critical', text: 'Cân nặng quá thấp (<0.5 kg)' });
   } else if (val > 100) {
     const corrected = (val / 10).toFixed(1);
-    msgs.push({ level: 'critical', text: `Có thể nhầm dấu phẩy? ${corrected} kg?`,
-      action: `<button class="btn-sm btn-primary" onclick="document.getElementById('f-weight').value=${corrected};validateWeight()">✅ Dùng ${corrected} kg</button>` });
+    msgs.push({
+      level: 'critical', text: `Có thể nhầm dấu phẩy? ${corrected} kg?`,
+      action: `<button class="btn-sm btn-primary" onclick="document.getElementById('f-weight').value=${corrected};validateWeight()">✅ Dùng ${corrected} kg</button>`
+    });
   } else if (val > 30) {
     const lbToKg = (val * 0.4536).toFixed(1);
-    msgs.push({ level: 'warning', text: `Nếu đây là lb: ${val} lb ≈ ${lbToKg} kg`,
-      action: `<button class="btn-sm btn-outline" onclick="document.getElementById('f-weight').value=${lbToKg};validateWeight()">Chuyển đổi</button>` });
+    msgs.push({
+      level: 'warning', text: `Nếu đây là lb: ${val} lb ≈ ${lbToKg} kg`,
+      action: `<button class="btn-sm btn-outline" onclick="document.getElementById('f-weight').value=${lbToKg};validateWeight()">Chuyển đổi</button>`
+    });
   }
 
   // Z-score
@@ -399,8 +403,10 @@ function validateWeight() {
     // Simple z-score approximation (actual calculation on backend)
     const ageMonths = getAgeMonths(dob);
     // WHO median weight-for-age approximation
-    const medians = { m: [3.3, 4.5, 5.6, 6.4, 7.0, 7.5, 7.9, 8.3, 8.6, 8.9, 9.2, 9.4, 9.6, 10.8, 12.2, 13.5, 15.3, 17.3, 20.5, 23.5, 28.2, 32.6, 37.0, 42.0, 49.0, 56.0],
-                      f: [3.2, 4.2, 5.1, 5.8, 6.4, 6.9, 7.3, 7.6, 7.9, 8.2, 8.5, 8.7, 8.9, 10.2, 11.5, 12.7, 14.5, 16.4, 19.5, 22.5, 27.0, 31.0, 36.0, 40.0, 45.0, 52.0] };
+    const medians = {
+      m: [3.3, 4.5, 5.6, 6.4, 7.0, 7.5, 7.9, 8.3, 8.6, 8.9, 9.2, 9.4, 9.6, 10.8, 12.2, 13.5, 15.3, 17.3, 20.5, 23.5, 28.2, 32.6, 37.0, 42.0, 49.0, 56.0],
+      f: [3.2, 4.2, 5.1, 5.8, 6.4, 6.9, 7.3, 7.6, 7.9, 8.2, 8.5, 8.7, 8.9, 10.2, 11.5, 12.7, 14.5, 16.4, 19.5, 22.5, 27.0, 31.0, 36.0, 40.0, 45.0, 52.0]
+    };
     const g = gender === 'male' ? 'm' : 'f';
     const idx = Math.min(Math.floor(ageMonths / (ageMonths < 24 ? 1 : 12)) + (ageMonths >= 24 ? 12 : 0), medians[g].length - 1);
     const median = medians[g][Math.max(0, idx)];
@@ -428,8 +434,10 @@ function validateHeight() {
   const msgs = [];
   if (val < 10) {
     const corrected = (val * 100).toFixed(0);
-    msgs.push({ level: 'critical', text: `Có thể nhập mét thay vì cm? ${val} m = ${corrected} cm`,
-      action: `<button class="btn-sm btn-primary" onclick="document.getElementById('f-height').value=${corrected};validateHeight()">✅ Dùng ${corrected} cm</button>` });
+    msgs.push({
+      level: 'critical', text: `Có thể nhập mét thay vì cm? ${val} m = ${corrected} cm`,
+      action: `<button class="btn-sm btn-primary" onclick="document.getElementById('f-height').value=${corrected};validateHeight()">✅ Dùng ${corrected} cm</button>`
+    });
   } else if (val > 200) {
     msgs.push({ level: 'warning', text: 'Chiều cao > 200 cm — vượt ngưỡng nhi khoa' });
   }
@@ -440,8 +448,10 @@ function validateHeight() {
   if (dob && gender) {
     const hazEl = document.getElementById('zscore-haz');
     const ageMonths = getAgeMonths(dob);
-    const medians = { m: [49.9, 54.7, 58.4, 61.4, 63.9, 65.9, 67.6, 69.2, 70.6, 72.0, 73.3, 74.5, 75.7, 84.9, 87.8, 96.1, 103.3, 110.0, 116.0, 121.7, 127.3, 133.0, 140.0, 147.0, 154.0, 163.0],
-                      f: [49.1, 53.7, 57.1, 59.8, 62.1, 64.0, 65.7, 67.3, 68.7, 70.1, 71.5, 72.8, 74.0, 83.6, 86.4, 95.1, 102.5, 109.0, 115.0, 120.7, 126.3, 132.0, 139.0, 145.0, 152.0, 160.0] };
+    const medians = {
+      m: [49.9, 54.7, 58.4, 61.4, 63.9, 65.9, 67.6, 69.2, 70.6, 72.0, 73.3, 74.5, 75.7, 84.9, 87.8, 96.1, 103.3, 110.0, 116.0, 121.7, 127.3, 133.0, 140.0, 147.0, 154.0, 163.0],
+      f: [49.1, 53.7, 57.1, 59.8, 62.1, 64.0, 65.7, 67.3, 68.7, 70.1, 71.5, 72.8, 74.0, 83.6, 86.4, 95.1, 102.5, 109.0, 115.0, 120.7, 126.3, 132.0, 139.0, 145.0, 152.0, 160.0]
+    };
     const g = gender === 'male' ? 'm' : 'f';
     const idx = Math.min(Math.floor(ageMonths / (ageMonths < 24 ? 1 : 12)) + (ageMonths >= 24 ? 12 : 0), medians[g].length - 1);
     const median = medians[g][Math.max(0, idx)];
@@ -712,7 +722,7 @@ async function submitRecord() {
 
     const payload = {
       patient: {
-        name: document.getElementById('f-name').value,
+        name: document.getElementById('f-name').value.toUpperCase(),
         medical_record_number: document.getElementById('f-mrn').value,
         date_of_birth: document.getElementById('f-dob').value,
         gender: document.getElementById('f-gender').value,

@@ -40,8 +40,8 @@ function renderSeverityChart(dist) {
   const labels = Object.keys(dist);
   const values = Object.values(dist);
   const colors = {
-    critical: '#C53030', high: '#D4620A', warning: '#B8860B',
-    info: '#2563A4', moderate: '#B8860B', low: '#2E7D5B'
+    critical: '#FF5656', high: '#FFA239', warning: '#FEEE91',
+    info: '#8CE4FF', moderate: '#F5C857', low: '#91D06C'
   };
   new Chart(ctx, {
     type: 'doughnut',
@@ -64,7 +64,7 @@ function renderRiskChart(dist) {
   if (!ctx) return;
   const labels = Object.keys(dist);
   const values = Object.values(dist);
-  const colors = { critical: '#C53030', high: '#D4620A', moderate: '#B8860B', low: '#2E7D5B', unknown: '#8B93A1' };
+  const colors = { critical: '#FF5555', high: '#FFA239', moderate: '#FEEE91', low: '#8CE4FF', unknown: '#8B93A1' };
   new Chart(ctx, {
     type: 'doughnut',
     data: {
